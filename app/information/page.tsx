@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useRouter } from "next/navigation";
 import { useProfile } from "@/lib/hooks/useProfile";
 import { usePagination } from "@/lib/hooks/usePagination";
@@ -14,13 +14,21 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { MediaItem } from "@/lib/schema";
 
 /**
- * Information Page (/information)
- * Displays paginated anime data from AniList.
- * Requires user profile (gate redirects to / if no profile).
- * Supports deep linking via ?page=N query parameter.
- * Allows clicking items to view details in a modal.
+ * Loading fallback while useSearchParams initializes
  */
-export default function InformationPage() {
+function InformationPageLoading() {
+  return (
+    <div className="flex items-center justify-center min-h-screen">
+      <p className="text-muted-foreground">Loading...</p>
+    </div>
+  );
+}
+
+/**
+ * Information Page Content
+ * Contains all the page logic that depends on useSearchParams
+ */
+function InformationPageContent() {
   const router = useRouter();
   const { profile, isStorageAvailable, saveProfile } = useProfile();
   const { currentPage, goToPage } = usePagination();
@@ -166,5 +174,20 @@ export default function InformationPage() {
         </Dialog>
       )}
     </div>
+  );
+}
+
+/**
+ * Information Page (/information)
+ * Displays paginated anime data from AniList.
+ * Requires user profile (gate redirects to / if no profile).
+ * Supports deep linking via ?page=N query parameter.
+ * Allows clicking items to view details in a modal.
+ */
+export default function InformationPage() {
+  return (
+    <Suspense fallback={<InformationPageLoading />}>
+      <InformationPageContent />
+    </Suspense>
   );
 }

@@ -1,0 +1,94 @@
+# GraphQL Query Contract for AniList API
+# API Endpoint: https://graphql.anilist.co
+# Documentation: https://anilist.gitbook.io/anilist-apiv2-docs/
+
+# Query to fetch paginated anime media data
+query GetAnimePage($page: Int!, $perPage: Int!) {
+  Page(page: $page, perPage: $perPage) {
+    pageInfo {
+      currentPage
+      hasNextPage
+      perPage
+    }
+    media(type: ANIME, sort: POPULARITY_DESC) {
+      id
+      title {
+        english
+        native
+      }
+      status
+      type
+      startDate {
+        year
+        month
+        day
+      }
+      endDate {
+        year
+        month
+        day
+      }
+      description(asHtml: false)
+      coverImage {
+        large
+        medium
+      }
+    }
+  }
+}
+
+# Example Variables:
+# {
+#   "page": 1,
+#   "perPage": 20
+# }
+
+# Example Response Structure:
+# {
+#   "data": {
+#     "Page": {
+#       "pageInfo": {
+#         "currentPage": 1,
+#         "hasNextPage": true,
+#         "perPage": 20
+#       },
+#       "media": [
+#         {
+#           "id": 1,
+#           "title": {
+#             "english": "Cowboy Bebop",
+#             "native": "カウボーイビバップ"
+#           },
+#           "status": "FINISHED",
+#           "type": "ANIME",
+#           "startDate": {
+#             "year": 1998,
+#             "month": 4,
+#             "day": 3
+#           },
+#           "endDate": {
+#             "year": 1999,
+#             "month": 4,
+#             "day": 24
+#           },
+#           "description": "Enter a world...",
+#           "coverImage": {
+#             "large": "https://s4.anilist.co/file/...",
+#             "medium": "https://s4.anilist.co/file/..."
+#           }
+#         }
+#       ]
+#     }
+#   }
+# }
+
+# Rate Limiting:
+# - 90 requests per minute (unauthenticated)
+# - Retry with exponential backoff on 429 responses
+# - Respect Retry-After header if provided
+
+# Error Handling:
+# - 400: Invalid query or variables
+# - 404: Resource not found (invalid page number)
+# - 429: Rate limit exceeded
+# - 500+: Server errors (retry with backoff)

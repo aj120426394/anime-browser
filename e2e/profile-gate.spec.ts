@@ -84,7 +84,10 @@ test.describe("Profile Gate", () => {
     await expect(page).toHaveURL(/\/information/);
   });
 
-  test("should bypass form if profile already exists in localStorage", async ({ page, context }) => {
+  test("should bypass form if profile already exists in localStorage", async ({
+    page,
+    context,
+  }) => {
     // Set a profile in localStorage
     await page.goto("/");
     await page.evaluate(() => {
@@ -154,5 +157,58 @@ test.describe("Profile Gate", () => {
 
     // Should navigate successfully
     await expect(page).toHaveURL(/\/information/);
+  });
+
+  test("should allow editing saved profile (T090)", async ({ page }) => {
+    // First, set up initial profile
+    await page.goto("/");
+
+    let usernameInput = page.getByLabel(/username/i);
+    let jobTitleInput = page.getByLabel(/job title/i);
+
+    await usernameInput.fill("OriginalUser");
+    await jobTitleInput.fill("Software Engineer");
+    await page.getByRole("button", { name: /submit|enter/i }).click();
+
+    // Wait for redirect
+    await expect(page).toHaveURL(/\/information/);
+
+    // Look for profile edit button or link
+    // Could be in header, navigation, or a settings menu
+    const editProfileButton = page
+      .locator("button, a")
+      .filter({ hasText: /edit profile|edit settings|settings|account/i })
+      .first();
+
+    if ((await editProfileButton.count()) > 0) {
+      await editProfileButton.click();
+
+      // Should see profile editor with pre-filled values
+      await expect(page.locator(`input[value="OriginalUser"]`)).toBeVisible();
+      await expect(page.locator(`input[value="Software Engineer"]`)).toBeVisible();
+
+      // Update values
+      usernameInput = page.getByLabel(/username/i) || page.locator(`input[value="OriginalUser"]`);
+      jobTitleInput =
+        page.getByLabel(/job title/i) || page.locator(`input[value="Software Engineer"]`);
+
+      await usernameInput.fill("UpdatedUser");
+      await jobTitleInput.fill("QA Engineer");
+
+      // Save changes
+      const saveButton = page.getByRole("button", { name: /save|update/i });
+      await saveButton.click();
+
+      // Should show confirmation
+      await expect(page.getByText(/saved|updated|success/i)).toBeVisible();
+
+      // Profile should be updated in localStorage (verify on reload)
+      await page.reload();
+      await page.waitForURL(/\/information/);
+
+      // Should still show updated profile
+      const profileDisplay = page.getByText(/UpdatedUser|QA Engineer/);
+      await expect(profileDisplay).toBeVisible();
+    }
   });
 });

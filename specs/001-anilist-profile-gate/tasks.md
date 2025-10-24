@@ -143,19 +143,19 @@
 
 ### Tests for User Story 3 (MANDATORY per constitution) ⚠️
 
-- [ ] T063 [P] [US3] Unit test for usePagination hook URL parsing in tests/unit/hooks.test.ts
-- [ ] T064 [P] [US3] Unit test for invalid page number handling in tests/unit/hooks.test.ts
-- [ ] T065 [P] [US3] E2E test for deep linking to specific page in e2e/pagination.spec.ts
-- [ ] T066 [P] [US3] E2E test for URL update on pagination navigation in e2e/pagination.spec.ts
+- [x] T063 [P] [US3] Unit test for usePagination hook URL parsing in tests/unit/hooks.test.ts
+- [x] T064 [P] [US3] Unit test for invalid page number handling in tests/unit/hooks.test.ts
+- [x] T065 [P] [US3] E2E test for deep linking to specific page in e2e/pagination.spec.ts
+- [x] T066 [P] [US3] E2E test for URL update on pagination navigation in e2e/pagination.spec.ts
 
 ### Implementation for User Story 3
 
-- [ ] T067 [US3] Integrate usePagination hook into /information page for URL sync
-- [ ] T068 [US3] Implement URL update on pagination control clicks
-- [ ] T069 [US3] Add validation for page parameter (default to 1 if invalid/negative)
-- [ ] T070 [US3] Handle out-of-bounds page numbers (redirect to last page or show message)
-- [ ] T071 [US3] Test browser back/forward navigation preserves pagination state
-- [ ] T072 [US3] Test deep link with profile gate: /information?page=5 without profile → gate → page 5 after submit
+- [x] T067 [US3] Integrate usePagination hook into /information page for URL sync
+- [x] T068 [US3] Implement URL update on pagination control clicks
+- [x] T069 [US3] Add validation for page parameter (default to 1 if invalid/negative)
+- [x] T070 [US3] Handle out-of-bounds page numbers (redirect to last page or show message)
+- [x] T071 [US3] Test browser back/forward navigation preserves pagination state
+- [x] T072 [US3] Test deep link with profile gate: /information?page=5 without profile → gate → page 5 after submit
 
 **Checkpoint**: All P1 user stories (MVP) should now be independently functional
 
@@ -169,23 +169,23 @@
 
 ### Tests for User Story 4 (MANDATORY per constitution) ⚠️
 
-- [ ] T073 [P] [US4] Component test for MediaModal rendering in tests/components/MediaModal.test.tsx
-- [ ] T074 [P] [US4] Component test for MediaModal close handlers in tests/components/MediaModal.test.tsx
-- [ ] T075 [P] [US4] Component test for HTML sanitization in modal in tests/components/MediaModal.test.tsx
-- [ ] T076 [P] [US4] E2E test for modal open on item click in e2e/modal-interaction.spec.ts
-- [ ] T077 [P] [US4] E2E test for modal close via ESC key in e2e/modal-interaction.spec.ts
-- [ ] T078 [P] [US4] E2E test for modal keyboard navigation (Tab focus trap) in e2e/modal-interaction.spec.ts
+- [x] T073 [P] [US4] Component test for MediaModal rendering in tests/components/MediaModal.test.tsx
+- [x] T074 [P] [US4] Component test for MediaModal close handlers in tests/components/MediaModal.test.tsx
+- [x] T075 [P] [US4] Component test for HTML sanitization in modal in tests/components/MediaModal.test.tsx
+- [x] T076 [P] [US4] E2E test for modal open on item click in e2e/modal-interaction.spec.ts
+- [x] T077 [P] [US4] E2E test for modal close via ESC key in e2e/modal-interaction.spec.ts
+- [x] T078 [P] [US4] E2E test for modal keyboard navigation (Tab focus trap) in e2e/modal-interaction.spec.ts
 
 ### Implementation for User Story 4
 
-- [ ] T079 [US4] Create MediaModal component in components/MediaModal.tsx using shadcn/ui Dialog
-- [ ] T080 [US4] Add modal state management to MediaGrid (selected item state)
-- [ ] T081 [US4] Implement click handler on MediaCard to open modal
-- [ ] T082 [US4] Display large image, title, status, dates, and sanitized description in modal
-- [ ] T083 [US4] Add close handlers (button, ESC key, overlay click) to modal
-- [ ] T084 [US4] Test modal accessibility: focus trap, keyboard navigation, screen reader announcements
-- [ ] T085 [US4] Format FuzzyDate (year/month/day) for display in modal
-- [ ] T086 [US4] Test modal on mobile viewport (full-screen friendly)
+- [x] T079 [US4] Create MediaModal component in components/MediaModal.tsx using shadcn/ui Dialog
+- [x] T080 [US4] Add modal state management to MediaGrid (selected item state)
+- [x] T081 [US4] Implement click handler on MediaCard to open modal
+- [x] T082 [US4] Display large image, title, status, dates, and sanitized description in modal
+- [x] T083 [US4] Add close handlers (button, ESC key, overlay click) to modal
+- [x] T084 [US4] Test modal accessibility: focus trap, keyboard navigation, screen reader announcements
+- [x] T085 [US4] Format FuzzyDate (year/month/day) for display in modal
+- [x] T086 [US4] Test modal on mobile viewport (full-screen friendly)
 
 **Checkpoint**: User Story 4 complete - modals work independently
 
@@ -199,14 +199,14 @@
 
 ### Tests for User Story 5 (MANDATORY per constitution) ⚠️
 
-- [ ] T087 [P] [US5] Unit test for updateProfile in storage utilities in tests/unit/storage.test.ts
-- [ ] T088 [P] [US5] Component test for ProfileEditor pre-fill in tests/components/ProfileEditor.test.tsx
-- [ ] T089 [P] [US5] Component test for ProfileEditor save in tests/components/ProfileEditor.test.tsx
-- [ ] T090 [P] [US5] E2E test for profile edit flow in e2e/profile-gate.spec.ts
+- [x] T087 [P] [US5] Unit test for updateProfile in storage utilities in tests/unit/storage.test.ts
+- [x] T088 [P] [US5] Component test for ProfileEditor pre-fill in tests/components/ProfileEditor.test.tsx
+- [x] T089 [P] [US5] Component test for ProfileEditor save in tests/components/ProfileEditor.test.tsx
+- [x] T090 [P] [US5] E2E test for profile edit flow in e2e/profile-gate.spec.ts
 
 ### Implementation for User Story 5
 
-- [ ] T091 [P] [US5] Create ProfileEditor component in components/ProfileEditor.tsx
+- [x] T091 [P] [US5] Create ProfileEditor component in components/ProfileEditor.tsx
 - [ ] T092 [US5] Add profile edit route or modal trigger in app/layout.tsx navigation
 - [ ] T093 [US5] Pre-fill form fields with current profile values from localStorage
 - [ ] T094 [US5] Implement save handler to update localStorage on form submission

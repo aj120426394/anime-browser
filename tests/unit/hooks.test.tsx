@@ -61,9 +61,7 @@ describe("useMediaPage Hook", () => {
       ] as any;
 
       const wrapper = ({ children }: { children: ReactNode }) => (
-        <MockedProvider mocks={mocks}>
-          {children}
-        </MockedProvider>
+        <MockedProvider mocks={mocks}>{children}</MockedProvider>
       );
 
       const { result } = renderHook(() => useMediaPage(1), { wrapper });
@@ -106,9 +104,7 @@ describe("useMediaPage Hook", () => {
       ] as any;
 
       const wrapper = ({ children }: { children: ReactNode }) => (
-        <MockedProvider mocks={mocks}>
-          {children}
-        </MockedProvider>
+        <MockedProvider mocks={mocks}>{children}</MockedProvider>
       );
 
       const { result } = renderHook(() => useMediaPage(2, 20), { wrapper });
@@ -141,9 +137,7 @@ describe("useMediaPage Hook", () => {
       ] as any;
 
       const wrapper = ({ children }: { children: ReactNode }) => (
-        <MockedProvider mocks={mocks}>
-          {children}
-        </MockedProvider>
+        <MockedProvider mocks={mocks}>{children}</MockedProvider>
       );
 
       const { result } = renderHook(() => useMediaPage(1, 50), { wrapper });
@@ -223,9 +217,7 @@ describe("useMediaPage Hook", () => {
       ] as any;
 
       const wrapper = ({ children }: { children: ReactNode }) => (
-        <MockedProvider mocks={mocks}>
-          {children}
-        </MockedProvider>
+        <MockedProvider mocks={mocks}>{children}</MockedProvider>
       );
 
       const { result } = renderHook(() => useMediaPage(0), { wrapper });
@@ -245,9 +237,7 @@ describe("useMediaPage Hook", () => {
       ] as any;
 
       const wrapper = ({ children }: { children: ReactNode }) => (
-        <MockedProvider mocks={mocks}>
-          {children}
-        </MockedProvider>
+        <MockedProvider mocks={mocks}>{children}</MockedProvider>
       );
 
       const { result } = renderHook(() => useMediaPage(1, 100), { wrapper });
@@ -269,9 +259,7 @@ describe("useMediaPage Hook", () => {
       ] as any;
 
       const wrapper = ({ children }: { children: ReactNode }) => (
-        <MockedProvider mocks={mocks}>
-          {children}
-        </MockedProvider>
+        <MockedProvider mocks={mocks}>{children}</MockedProvider>
       );
 
       const { result } = renderHook(() => useMediaPage(1), { wrapper });
@@ -296,9 +284,7 @@ describe("useMediaPage Hook", () => {
       ] as any;
 
       const wrapper = ({ children }: { children: ReactNode }) => (
-        <MockedProvider mocks={mocks}>
-          {children}
-        </MockedProvider>
+        <MockedProvider mocks={mocks}>{children}</MockedProvider>
       );
 
       const { result } = renderHook(() => useMediaPage(1), { wrapper });
@@ -324,9 +310,7 @@ describe("useMediaPage Hook", () => {
       ] as any;
 
       const wrapper = ({ children }: { children: ReactNode }) => (
-        <MockedProvider mocks={mocks}>
-          {children}
-        </MockedProvider>
+        <MockedProvider mocks={mocks}>{children}</MockedProvider>
       );
 
       const { result } = renderHook(() => useMediaPage(1), { wrapper });
@@ -346,9 +330,7 @@ describe("useMediaPage Hook", () => {
       ] as any;
 
       const wrapper = ({ children }: { children: ReactNode }) => (
-        <MockedProvider mocks={mocks}>
-          {children}
-        </MockedProvider>
+        <MockedProvider mocks={mocks}>{children}</MockedProvider>
       );
 
       const { result } = renderHook(() => useMediaPage(1), { wrapper });
@@ -368,9 +350,7 @@ describe("useMediaPage Hook", () => {
       ] as any;
 
       const wrapper = ({ children }: { children: ReactNode }) => (
-        <MockedProvider mocks={mocks}>
-          {children}
-        </MockedProvider>
+        <MockedProvider mocks={mocks}>{children}</MockedProvider>
       );
 
       const { result } = renderHook(() => useMediaPage(1), { wrapper });

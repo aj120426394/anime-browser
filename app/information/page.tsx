@@ -7,12 +7,15 @@ import { usePagination } from "@/lib/hooks/usePagination";
 import { useMediaPage } from "@/lib/hooks/useMediaPage";
 import { MediaGrid } from "@/components/MediaGrid";
 import { Pagination } from "@/components/Pagination";
+import { MediaModal } from "@/components/MediaModal";
+import { MediaItem } from "@/lib/schema";
 
 /**
  * Information Page (/information)
  * Displays paginated anime data from AniList.
  * Requires user profile (gate redirects to / if no profile).
  * Supports deep linking via ?page=N query parameter.
+ * Allows clicking items to view details in a modal.
  */
 export default function InformationPage() {
   const router = useRouter();
@@ -20,6 +23,8 @@ export default function InformationPage() {
   const { currentPage, goToPage } = usePagination();
   const { mediaItems, pageInfo, loading, error } = useMediaPage(currentPage, 20);
   const [storageChecked, setStorageChecked] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<MediaItem | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Check if profile exists, redirect to gate if not
   useEffect(() => {
@@ -28,6 +33,18 @@ export default function InformationPage() {
       router.push("/");
     }
   }, [profile, isStorageAvailable, router]);
+
+  // Handle item click to open modal
+  const handleItemClick = (item: MediaItem) => {
+    setSelectedItem(item);
+    setIsModalOpen(true);
+  };
+
+  // Handle modal close
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedItem(null);
+  };
 
   // Show loading while checking storage
   if (!storageChecked) {
@@ -47,7 +64,8 @@ export default function InformationPage() {
             <h1 className="text-3xl font-bold">Anime Browser</h1>
             {profile && (
               <p className="text-sm text-muted-foreground">
-                Welcome, <span className="font-semibold">{profile.username}</span> ({profile.jobTitle})
+                Welcome, <span className="font-semibold">{profile.username}</span> (
+                {profile.jobTitle})
               </p>
             )}
           </div>
@@ -72,13 +90,7 @@ export default function InformationPage() {
           {loading && mediaItems.length === 0 ? (
             <MediaGrid items={[]} isLoading={true} />
           ) : (
-            <MediaGrid
-              items={mediaItems}
-              onItemClick={(item) => {
-                // TODO: Open modal with item details
-                console.log("Clicked item:", item);
-              }}
-            />
+            <MediaGrid items={mediaItems} onItemClick={handleItemClick} />
           )}
         </div>
 
@@ -99,6 +111,9 @@ export default function InformationPage() {
           </div>
         )}
       </div>
+
+      {/* Media Modal */}
+      <MediaModal isOpen={isModalOpen} item={selectedItem} onClose={handleCloseModal} />
     </div>
   );
 }

@@ -1,0 +1,19 @@
+schema: https://graphql.anilist.co
+documents: "lib/graphql/**/*.graphql"
+
+generates:
+  lib/graphql/generated/schema.ts:
+    plugins:
+      - typescript
+    config:
+      useIndexSignature: true
+
+  lib/graphql/generated/operations.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
+    config:
+      withHooks: true
+      withComponent: false
+      importOperationTypesFrom: "./schema"

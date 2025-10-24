@@ -24,23 +24,23 @@
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Initialize Next.js 15 project with TypeScript and App Router
-- [ ] T002 [P] Install core dependencies (React 18+, Next.js 15, TypeScript 5.x)
-- [ ] T003 [P] Install Apollo Client dependencies (@apollo/client, graphql)
-- [ ] T004 [P] Install UI dependencies (shadcn/ui components, Tailwind CSS 3.x)
-- [ ] T005 [P] Install validation and utility dependencies (Zod 3.x, DOMPurify, isomorphic-dompurify)
-- [ ] T006 [P] Install testing dependencies (Vitest, React Testing Library, Playwright, @testing-library/jest-dom)
-- [ ] T007 [P] Install GraphQL Code Generator dependencies (@graphql-codegen/cli, plugins)
-- [ ] T008 Configure TypeScript strict mode in tsconfig.json
-- [ ] T009 [P] Configure Tailwind CSS in tailwind.config.js with shadcn/ui presets
-- [ ] T010 [P] Configure Next.js in next.config.js (image domains for AniList CDN, strict mode)
-- [ ] T011 [P] Configure Vitest in vitest.config.ts with jsdom environment
-- [ ] T012 [P] Configure Playwright in playwright.config.ts with browsers and test directory
-- [ ] T013 [P] Configure GraphQL Code Generator in codegen.yml with AniList schema URL
-- [ ] T014 [P] Create .env.local with NEXT_PUBLIC_CHALLENGE_VERSION=3.5
-- [ ] T015 [P] Configure ESLint with Next.js and TypeScript rules
-- [ ] T016 [P] Configure Prettier for code formatting
-- [ ] T017 Create project directory structure (app/, components/, lib/, tests/, e2e/)
+- [x] T001 Initialize Next.js 15 project with TypeScript and App Router
+- [x] T002 [P] Install core dependencies (React 18+, Next.js 15, TypeScript 5.x)
+- [x] T003 [P] Install Apollo Client dependencies (@apollo/client, graphql)
+- [x] T004 [P] Install UI dependencies (shadcn/ui components, Tailwind CSS 3.x)
+- [x] T005 [P] Install validation and utility dependencies (Zod 3.x, DOMPurify, isomorphic-dompurify)
+- [x] T006 [P] Install testing dependencies (Vitest, React Testing Library, Playwright, @testing-library/jest-dom)
+- [x] T007 [P] Install GraphQL Code Generator dependencies (@graphql-codegen/cli, plugins)
+- [x] T008 Configure TypeScript strict mode in tsconfig.json
+- [x] T009 [P] Configure Tailwind CSS in tailwind.config.js with shadcn/ui presets
+- [x] T010 [P] Configure Next.js in next.config.js (image domains for AniList CDN, strict mode)
+- [x] T011 [P] Configure Vitest in vitest.config.ts with jsdom environment
+- [x] T012 [P] Configure Playwright in playwright.config.ts with browsers and test directory
+- [x] T013 [P] Configure GraphQL Code Generator in codegen.yml with AniList schema URL
+- [x] T014 [P] Create .env.local with NEXT_PUBLIC_CHALLENGE_VERSION=3.5
+- [x] T015 [P] Configure ESLint with Next.js and TypeScript rules
+- [x] T016 [P] Configure Prettier for code formatting
+- [x] T017 Create project directory structure (app/, components/, lib/, tests/, e2e/)
 
 ---
 
@@ -50,22 +50,22 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T018 [P] Create Zod schemas in lib/schema.ts (Profile, MediaItem, PageInfo, PaginationState)
-- [ ] T019 [P] Create localStorage utilities in lib/storage.ts with SSR safety checks
-- [ ] T019a [P] Add localStorage availability detection and fallback UI in lib/storage.ts
-- [ ] T020 [P] Create GraphQL query in lib/graphql/queries.ts (GetAnimePage query)
+- [x] T018 [P] Create Zod schemas in lib/schema.ts (Profile, MediaItem, PageInfo, PaginationState)
+- [x] T019 [P] Create localStorage utilities in lib/storage.ts with SSR safety checks
+- [x] T019a [P] Add localStorage availability detection and fallback UI in lib/storage.ts
+- [x] T020 [P] Create GraphQL query in lib/graphql/queries.ts (GetAnimePage query)
 - [ ] T021 Run GraphQL Code Generator to generate types in lib/graphql/generated/
-- [ ] T022 Create Apollo Client configuration in lib/graphql/client.ts with InMemoryCache type policies
-- [ ] T023 [P] Create useProfile hook in lib/hooks/useProfile.ts for profile CRUD operations
-- [ ] T024 [P] Create usePagination hook in lib/hooks/usePagination.ts for URL-synced pagination state
-- [ ] T025 [P] Create useMediaPage hook in lib/hooks/useMediaPage.ts for fetching and transforming media data
-- [ ] T026 [P] Create HTML sanitization utility in lib/utils/sanitize.ts with DOMPurify
-- [ ] T027 [P] Create Footer component in components/Footer.tsx with challenge version display
-- [ ] T028 Create root layout in app/layout.tsx with Footer and Apollo Provider wrapper
-- [ ] T029 [P] Install shadcn/ui Dialog component (npx shadcn-ui@latest add dialog)
-- [ ] T030 [P] Install shadcn/ui Button component (npx shadcn-ui@latest add button)
-- [ ] T031 [P] Install shadcn/ui Input component (npx shadcn-ui@latest add input)
-- [ ] T032 [P] Install shadcn/ui Card component (npx shadcn-ui@latest add card)
+- [x] T022 Create Apollo Client configuration in lib/graphql/client.ts with InMemoryCache type policies
+- [x] T023 [P] Create useProfile hook in lib/hooks/useProfile.ts for profile CRUD operations
+- [x] T024 [P] Create usePagination hook in lib/hooks/usePagination.ts for URL-synced pagination state
+- [x] T025 [P] Create useMediaPage hook in lib/hooks/useMediaPage.ts for fetching and transforming media data
+- [x] T026 [P] Create HTML sanitization utility in lib/utils/sanitize.ts with DOMPurify
+- [x] T027 [P] Create Footer component in components/Footer.tsx with challenge version display
+- [x] T028 Create root layout in app/layout.tsx with Footer and Apollo Provider wrapper
+- [x] T029 [P] Install shadcn/ui Dialog component (npx shadcn-ui@latest add dialog)
+- [x] T030 [P] Install shadcn/ui Button component (npx shadcn-ui@latest add button)
+- [x] T031 [P] Install shadcn/ui Input component (npx shadcn-ui@latest add input)
+- [x] T032 [P] Install shadcn/ui Card component (npx shadcn-ui@latest add card)
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 

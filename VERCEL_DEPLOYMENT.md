@@ -3,6 +3,7 @@
 ## Overview
 
 This guide walks through deploying the **leonardo-web-challenge** project to Vercel and covers:
+
 - **T133**: Setting up environment variables in Vercel dashboard
 - **T134**: Deploying to Vercel and verifying production build
 
@@ -18,6 +19,7 @@ This guide walks through deploying the **leonardo-web-challenge** project to Ver
 ### Step 1: Create Vercel Project
 
 **Option A: Automatic (Recommended)**
+
 1. Visit https://vercel.com/new
 2. Click "Import Git Repository"
 3. Search for and select your repository
@@ -25,6 +27,7 @@ This guide walks through deploying the **leonardo-web-challenge** project to Ver
 5. Vercel will auto-detect Next.js configuration
 
 **Option B: Manual**
+
 1. Install Vercel CLI: `npm install -g vercel`
 2. From project root: `vercel link`
 3. Follow prompts to create project
@@ -55,11 +58,12 @@ Once project is created in Vercel:
 
 ### Environment Variables Explained
 
-| Variable | Purpose | Type | Value |
-|----------|---------|------|-------|
+| Variable                        | Purpose             | Type   | Value |
+| ------------------------------- | ------------------- | ------ | ----- |
 | `NEXT_PUBLIC_CHALLENGE_VERSION` | Displayed in footer | Public | `3.5` |
 
 **Key Points:**
+
 - Variables prefixed with `NEXT_PUBLIC_` are available in browser (not secret)
 - Must be set in Vercel for production deployments
 - Local development uses `.env.local` (already configured)
@@ -70,6 +74,7 @@ Once project is created in Vercel:
 ### Step 3: Deploy to Production
 
 **Option A: Git Push (Automatic)**
+
 1. Make sure code is pushed to GitHub main branch:
    ```bash
    git push origin main
@@ -79,6 +84,7 @@ Once project is created in Vercel:
 4. Once complete, you'll see ✓ Production Ready
 
 **Option B: Manual Deployment**
+
 1. From project root:
    ```bash
    vercel --prod
@@ -215,15 +221,18 @@ In Vercel Dashboard:
 ### Issue: Build Fails
 
 **Error: "useSearchParams() should be wrapped in Suspense"**
+
 - ✅ Already fixed in codebase
 - This error was fixed by wrapping page content with Suspense boundary
 - If you see this, ensure you have the latest code
 
 **Error: GraphQL Code Generation Failed**
+
 - Run locally first: `npm run generate`
 - Commit generated files before deploying
 
 **Error: Type Checking Failed**
+
 - Run locally: `npm run type-check`
 - Fix any TypeScript errors
 - ESLint warnings are acceptable
@@ -233,6 +242,7 @@ In Vercel Dashboard:
 **Footer shows "Challenge version undefined"**
 
 Steps to fix:
+
 1. Verify variable is set in Vercel dashboard
 2. Check variable name: Must be exactly `NEXT_PUBLIC_CHALLENGE_VERSION`
 3. Redeploy: `git push origin main` or `vercel --prod`
@@ -249,9 +259,7 @@ Steps to fix:
 2. Verify `next.config.js` has:
    ```javascript
    images: {
-     remotePatterns: [
-       { protocol: 'https', hostname: 'anilist.co' }
-     ]
+     remotePatterns: [{ protocol: "https", hostname: "anilist.co" }];
    }
    ```
 3. If issue persists, clear Next.js cache: `rm -rf .next`
@@ -281,7 +289,7 @@ If production has issues:
 1. **Vercel Dashboard**
    - Go to Deployments tab
    - Find previous stable version
-   - Click "..."  → "Promote to Production"
+   - Click "..." → "Promote to Production"
    - Confirm
 
 2. **Git Revert**
@@ -295,13 +303,13 @@ If production has issues:
 
 Target metrics for production deployment:
 
-| Metric | Target | Check With |
-|--------|--------|-----------|
-| First Load | < 3s | DevTools Network tab |
-| Time to Interactive (TTI) | < 1s | Lighthouse audit |
-| Largest Contentful Paint (LCP) | < 2.5s | Lighthouse audit |
-| Cumulative Layout Shift (CLS) | < 0.1 | Lighthouse audit |
-| Image format | WebP | DevTools Network tab |
+| Metric                         | Target | Check With           |
+| ------------------------------ | ------ | -------------------- |
+| First Load                     | < 3s   | DevTools Network tab |
+| Time to Interactive (TTI)      | < 1s   | Lighthouse audit     |
+| Largest Contentful Paint (LCP) | < 2.5s | Lighthouse audit     |
+| Cumulative Layout Shift (CLS)  | < 0.1  | Lighthouse audit     |
+| Image format                   | WebP   | DevTools Network tab |
 
 ## Next Steps (T135)
 
@@ -346,6 +354,7 @@ npm run test:e2e       # Run E2E tests on production
 ---
 
 **Deployment Status**: Ready for T133-T134 Implementation
+
 - ✅ Local build verified
 - ✅ vercel.json configured
 - ✅ .env.local configured
@@ -387,6 +396,7 @@ https://your-custom-domain.com
 ```
 
 **To find it:**
+
 1. Go to https://vercel.com/dashboard
 2. Select the `leonardo-web-challenge` project
 3. Look for "Deployments" → most recent deployment
@@ -395,6 +405,7 @@ https://your-custom-domain.com
 ### Step 2: Configure E2E Tests for Production
 
 The Playwright configuration automatically detects Vercel URLs and:
+
 - ✅ Disables local web server startup
 - ✅ Increases timeout values for network conditions
 - ✅ Uses production baseURL
@@ -423,6 +434,7 @@ npm run test:e2e -- --debug e2e/profile-gate.spec.ts
 The E2E tests verify all user stories:
 
 #### User Story 1: Profile Gate
+
 - **Tests**: `e2e/profile-gate.spec.ts`
 - **Coverage**:
   - ✅ Form displays on first visit
@@ -433,6 +445,7 @@ The E2E tests verify all user stories:
   - ✅ Mobile viewport compatibility
 
 #### User Story 2: Paginated Data
+
 - **Tests**: `e2e/pagination.spec.ts`
 - **Coverage**:
   - ✅ Anime data loads from AniList API
@@ -442,6 +455,7 @@ The E2E tests verify all user stories:
   - ✅ Responsive layout on mobile
 
 #### User Story 3: Deep Linking
+
 - **Tests**: `e2e/pagination.spec.ts`
 - **Coverage**:
   - ✅ Deep link `/information?page=5` works
@@ -449,6 +463,7 @@ The E2E tests verify all user stories:
   - ✅ Invalid page numbers handled gracefully
 
 #### User Story 4: Modal Interaction
+
 - **Tests**: `e2e/modal-interaction.spec.ts`
 - **Coverage**:
   - ✅ Click item opens modal
@@ -468,6 +483,7 @@ npm run test:e2e
 ```
 
 **Expected Output:**
+
 ```
 ✓ [chromium] › profile-gate.spec.ts › should display profile form on first visit
 ✓ [chromium] › profile-gate.spec.ts › should validate form fields
@@ -520,6 +536,7 @@ npm run test:e2e -- --headed --debug --slow-mo=1000
 After tests complete:
 
 1. **HTML Report** (automatically generated):
+
    ```bash
    npm run test:e2e -- --reporter=html
    npx playwright show-report
@@ -545,6 +562,7 @@ After tests complete:
 **Symptoms**: `Error: Timeout 30000ms exceeded`
 
 **Solutions:**
+
 ```bash
 # 1. Check if Vercel site is accessible
 curl -I https://leonardo-web-challenge.vercel.app
@@ -564,11 +582,13 @@ npm run test:e2e -- --headed  # See browser UI
 **Symptoms**: `Error: Locator.click: No element matches selector`
 
 **Causes**:
+
 - Site not fully loaded
 - localStorage blocking script
 - Private browsing mode active
 
 **Solutions:**
+
 ```bash
 # 1. Verify site loads in browser
 open "https://leonardo-web-challenge.vercel.app"
@@ -585,6 +605,7 @@ npm run test:e2e -- --debug
 **Symptoms**: Image placeholders show, no actual images visible
 
 **Solutions:**
+
 1. This is expected in headless browser mode
 2. Verify in headed mode: `npm run test:e2e -- --headed`
 3. Check `next.config.js` for image domain configuration
@@ -595,6 +616,7 @@ npm run test:e2e -- --debug
 **Symptoms**: Modal tests fail, modal doesn't appear on click
 
 **Solutions:**
+
 ```bash
 # 1. Run with headed browser
 npm run test:e2e -- --headed --project=chromium
@@ -611,6 +633,7 @@ npm run test:e2e -- --debug e2e/modal-interaction.spec.ts
 **Symptoms**: "Too many requests" errors during pagination
 
 **Solutions:**
+
 1. This is handled by retry logic in Apollo Client
 2. Wait a few minutes and retry
 3. Run tests with longer delays: `npm run test:e2e -- --slow-mo=2000`
@@ -708,6 +731,7 @@ chmod +x scripts/test-production.sh
 ✅ **T135 Complete**: Full E2E test suite executed against Vercel production deployment
 
 **What was validated:**
+
 1. All 7 user stories work end-to-end
 2. All 5 browser configurations tested
 3. Mobile and desktop viewports verified
@@ -717,6 +741,7 @@ chmod +x scripts/test-production.sh
 7. localStorage persistence verified
 
 **Next Steps (Post-Deployment):**
+
 - Monitor Vercel Analytics for production usage
 - Re-run E2E tests weekly
 - Monitor error rates and user feedback

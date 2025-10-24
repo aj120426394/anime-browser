@@ -17,7 +17,8 @@ You were absolutely right to suggest this! Using `.graphql` files is the **Graph
 
 ```
 lib/graphql/
-├── anime.graphql              ← GraphQL queries (source of truth)
+├── queries/
+│   └── anime.graphql          ← GraphQL queries (source of truth)
 ├── generated/
 │   ├── schema.ts              ← Auto-generated AniList schema types
 │   └── operations.ts          ← Auto-generated hooks (useGetAnimePageQuery, etc.)
@@ -69,7 +70,7 @@ lib/graphql/
 
 When you need more queries:
 
-1. Create `lib/graphql/anime.graphql` (or `manga.graphql`, etc.)
+1. Create `lib/graphql/queries/anime.graphql` (or `manga.graphql`, etc.)
    ```graphql
    query GetMangaPage($page: Int!, $perPage: Int!) {
      # ...

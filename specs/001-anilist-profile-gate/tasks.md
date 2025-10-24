@@ -54,7 +54,7 @@
 - [x] T019 [P] Create localStorage utilities in lib/storage.ts with SSR safety checks
 - [x] T019a [P] Add localStorage availability detection and fallback UI in lib/storage.ts
 - [x] T020 [P] Create GraphQL query in lib/graphql/queries.ts (GetAnimePage query)
-- [ ] T021 Run GraphQL Code Generator to generate types in lib/graphql/generated/
+- [x] T021 Run GraphQL Code Generator to generate types in lib/graphql/generated/
 - [x] T022 Create Apollo Client configuration in lib/graphql/client.ts with InMemoryCache type policies
 - [x] T023 [P] Create useProfile hook in lib/hooks/useProfile.ts for profile CRUD operations
 - [x] T024 [P] Create usePagination hook in lib/hooks/usePagination.ts for URL-synced pagination state

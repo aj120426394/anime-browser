@@ -54,15 +54,6 @@ npm run codegen
 This generates `lib/graphql/generated/operations.ts` with all query types and React hooks.
 These generated files are automatically excluded from git (see `.gitignore`).
 
-4. **Configure environment variables**
-
-```bash
-# .env.local (created during setup)
-NEXT_PUBLIC_CHALLENGE_VERSION=3.5
-```
-
-The project includes auto-detection of the challenge version from environment variables.
-
 ## Development
 
 ### Run development server
@@ -280,10 +271,7 @@ npm run build && npm run start
    - Push code to GitHub
    - Link repository in Vercel dashboard
 
-2. **Configure environment**
-   - Set `NEXT_PUBLIC_CHALLENGE_VERSION=3.5` in Vercel dashboard
-
-3. **Deploy**
+2. **Deploy**
 
 ```bash
 npm run build
@@ -298,16 +286,6 @@ git push origin main
 ```bash
 # Run E2E tests against production
 npm run e2e:prod
-```
-
-### Environment Variables
-
-```env
-# .env.local (development)
-NEXT_PUBLIC_CHALLENGE_VERSION=3.5
-
-# Vercel Dashboard (production)
-NEXT_PUBLIC_CHALLENGE_VERSION=3.5
 ```
 
 ## Error Handling

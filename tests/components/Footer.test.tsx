@@ -15,7 +15,7 @@ describe("Footer Component", () => {
     it("should display version number in correct format", () => {
       render(<Footer />);
 
-      // Version should be displayed (either 1.0.0 default or 3.5 from env)
+      // Version should be displayed (static version 3.5)
       const footer = screen.getByText(/challenge version/i);
       expect(footer).toBeInTheDocument();
       // Verify version number is present

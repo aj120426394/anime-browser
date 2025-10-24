@@ -18,15 +18,15 @@ A blocking **Dialog** collects **Username** and **Job Title** on first run. Unti
 
 ## Time & Effort
 
-| Phase                  | Focus                                                                                                                                                | Duration    |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| Initial research       | Compared candidate APIs, studied AniList schema and image fields, confirmed auth (public), weighed Zod, set target a11y (WCAG 2.2 AA), scoped tests. | ~30--40 min |
-| Spec writing (SDD)     | Wrote the spec: requirements, user stories, two-page flow, data model, queries, retry & caching, security, perf budget, directory layout.            | ~1 hr       |
-| Preparing SpecKit      | Structured the spec so SpecKit could generate in phases with guardrails and explicit acceptance criteria.                                            | ~1--1¼ hr   |
-| AI build + review loop | Let AI scaffold and implement; I reviewed diffs, ran locally, debugged edge cases, and guided corrections (manual fixes where necessary).            | ~1½ hr      |
-| Polish & ship          | UI adjustments, Playwright golden-path pass, a few extra tests, deployment and README.                                                               | ~1 hr       |
+| Phase                  | Focus                                                                                                                                                | Duration |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| Initial research       | Compared candidate APIs, studied AniList schema and image fields, confirmed auth (public), weighed Zod, set target a11y (WCAG 2.2 AA), scoped tests. | ~30 min  |
+| Spec writing (SDD)     | Wrote the spec: requirements, user stories, two-page flow, data model, queries, retry & caching, security, perf budget, directory layout.            | ~45 min  |
+| Preparing SpecKit      | Structured the spec so SpecKit could generate in phases with guardrails and explicit acceptance criteria.                                            | ~15 min  |
+| AI build + review loop | Let AI scaffold and implement; I reviewed diffs, ran locally, debugged edge cases, and guided corrections (manual fixes where necessary).            | ~1 hr    |
+| Polish & ship          | UI adjustments, Playwright golden-path pass, a few extra tests, deployment and README.                                                               | ~1 hr    |
 
-**Total:** ~5--5¾ hours. Core implementation fit the recommended window; extra time went into spec quality, testing breadth, and deployment hardening.
+**Total:** ~3.5hours. Core implementation fit the recommended window; extra time went into spec quality, testing breadth, and deployment hardening.
 
 ---
 

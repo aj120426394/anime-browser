@@ -93,9 +93,6 @@ npm run test
 
 # Run tests in watch mode
 npm run test:watch
-
-# Run tests with coverage
-npm run test:coverage
 ```
 
 **End-to-End Tests (Playwright)**
@@ -106,9 +103,6 @@ npm run e2e
 
 # Run E2E tests with UI
 npm run e2e:ui
-
-# Run E2E tests in debug mode
-npm run e2e:debug
 ```
 
 ### Code Quality
@@ -146,12 +140,6 @@ npm run build
 
 ```bash
 npm run start
-```
-
-### Analyze bundle size
-
-```bash
-npm run analyze
 ```
 
 ## Architecture

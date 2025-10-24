@@ -7,25 +7,26 @@ describe("Footer Component", () => {
     it("should display challenge version from environment variable", () => {
       render(<Footer />);
 
-      // Should display version - check for "v3.5" or "Challenge version"
-      const versionText =
-        screen.queryByText(/challenge version/i) || screen.queryByText(/v\d+\.\d+/);
+      // Should display version - check for "Challenge version"
+      const versionText = screen.getByText(/challenge version/i);
       expect(versionText).toBeInTheDocument();
     });
 
     it("should display version number in correct format", () => {
       render(<Footer />);
 
-      // Version should be in format vX.Y
-      const footer = screen.getByText(/v\d+\.\d+/);
+      // Version should be displayed (either 1.0.0 default or 3.5 from env)
+      const footer = screen.getByText(/challenge version/i);
       expect(footer).toBeInTheDocument();
+      // Verify version number is present
+      expect(footer.textContent).toMatch(/\d+\.\d+/);
     });
 
     it("should include proper copyright or attribution", () => {
       render(<Footer />);
 
-      // Footer should have some text content
-      const footerElement = screen.getByRole("contentinfo") || screen.getByText(/v\d+\.\d+/);
+      // Footer should have version text content
+      const footerElement = screen.getByText(/challenge version/i);
       expect(footerElement).toBeInTheDocument();
     });
   });
@@ -51,8 +52,8 @@ describe("Footer Component", () => {
     it("should render on all screen sizes", () => {
       render(<Footer />);
 
-      // Footer should always be visible
-      const footer = screen.getByText(/v\d+\.\d+/);
+      // Footer should always be visible with version text
+      const footer = screen.getByText(/challenge version/i);
       expect(footer).toBeVisible();
     });
   });

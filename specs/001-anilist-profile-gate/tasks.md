@@ -84,8 +84,8 @@
 - [x] T033 [P] [US1] Unit test for ProfileSchema validation in tests/unit/schema.test.ts
 - [x] T034 [P] [US1] Unit test for getProfile and saveProfile in tests/unit/storage.test.ts
 - [x] T035 [P] [US1] Unit test for useProfile hook in tests/unit/hooks.test.ts
-- [ ] T036 [P] [US1] Component test for ProfileForm validation in tests/components/ProfileForm.test.tsx
-- [ ] T037 [P] [US1] Component test for ProfileForm submission in tests/components/ProfileForm.test.tsx
+- [x] T036 [P] [US1] Component test for ProfileForm validation in tests/components/ProfileForm.test.tsx
+- [x] T037 [P] [US1] Component test for ProfileForm submission in tests/components/ProfileForm.test.tsx
 - [x] T038 [P] [US1] E2E test for profile gate blocking in e2e/profile-gate.spec.ts
 - [x] T039 [P] [US1] E2E test for profile form submission flow in e2e/profile-gate.spec.ts
 

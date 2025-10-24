@@ -57,6 +57,18 @@ export default function ProfileGatePage() {
 
   return (
     <div className="flex flex-col items-center justify-center flex-1 px-4 py-8 sm:py-12">
+      {!isStorageAvailable && (
+        <div
+          className="w-full max-w-md mb-6 bg-amber-50 border border-amber-200 rounded-lg p-4 text-amber-900"
+          role="alert"
+          aria-label="Storage warning"
+        >
+          <p className="font-semibold text-sm">Storage Required</p>
+          <p className="text-xs mt-1">
+            Profile storage requires localStorage. Please enable cookies/storage in browser settings or exit private browsing mode.
+          </p>
+        </div>
+      )}
       <ProfileForm onSubmit={handleProfileSubmit} isLoading={isSubmitting} />
     </div>
   );

@@ -56,6 +56,22 @@ export default function InformationPage() {
     setIsEditProfileOpen(false);
   };
 
+  // Handle keyboard navigation (Escape to close modal)
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        if (isModalOpen) {
+          handleCloseModal();
+        } else if (isEditProfileOpen) {
+          setIsEditProfileOpen(false);
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isModalOpen, isEditProfileOpen]);
+
   // Show loading while checking storage
   if (!storageChecked) {
     return (
@@ -95,9 +111,15 @@ export default function InformationPage() {
         {error && (
           <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4 text-destructive">
             <p className="font-semibold">Error loading anime</p>
-            <p className="text-sm mt-1">{error.message}</p>
+            <p className="text-sm mt-1">
+              {error.message.includes("429")
+                ? "Too many requests. The AniList API rate limit has been reached. Please wait a moment before trying again."
+                : error.message.includes("Failed to fetch")
+                  ? "Network connection failed. Please check your internet connection and try again."
+                  : error.message}
+            </p>
             <p className="text-xs mt-2 text-destructive/80">
-              Check your internet connection and try refreshing the page.
+              If this persists, try refreshing the page or contact support.
             </p>
           </div>
         )}
@@ -123,7 +145,7 @@ export default function InformationPage() {
 
         {/* Loading indicator for page changes */}
         {loading && mediaItems.length > 0 && (
-          <div className="text-center py-4 text-muted-foreground">
+          <div className="text-center py-4 text-muted-foreground" role="status" aria-live="polite">
             <p>Loading page {currentPage}...</p>
           </div>
         )}

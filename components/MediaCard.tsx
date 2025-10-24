@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import { MediaItem } from "@/lib/schema";
 
@@ -12,11 +13,18 @@ interface MediaCardProps {
  * MediaCard Component
  * Displays a single anime item with cover image, title, and basic info.
  * Clickable to open details modal.
+ * Handles image loading failures with graceful fallback.
  *
  * @param item - MediaItem data to display
  * @param onClick - Callback when card is clicked
  */
 export function MediaCard({ item, onClick }: MediaCardProps) {
+  const [imageError, setImageError] = useState(false);
+
+  const handleImageError = () => {
+    setImageError(true);
+  };
+
   return (
     <button
       onClick={onClick}
@@ -26,7 +34,7 @@ export function MediaCard({ item, onClick }: MediaCardProps) {
       <div className="bg-card border border-border rounded-lg overflow-hidden h-full flex flex-col">
         {/* Image Container */}
         <div className="relative w-full aspect-[3/4] bg-muted overflow-hidden">
-          {item.imageMedium ? (
+          {item.imageMedium && !imageError ? (
             <Image
               src={item.imageMedium}
               alt={item.engTitle || item.nativeTitle}
@@ -34,10 +42,14 @@ export function MediaCard({ item, onClick }: MediaCardProps) {
               className="object-cover group-hover:scale-105 transition-transform duration-200"
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               priority={false}
+              onError={handleImageError}
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center">
-              <span className="text-muted-foreground text-sm">No image</span>
+            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-muted to-muted/50">
+              <div className="text-center space-y-2">
+                <div className="text-3xl">📷</div>
+                <span className="text-muted-foreground text-xs">Image unavailable</span>
+              </div>
             </div>
           )}
         </div>

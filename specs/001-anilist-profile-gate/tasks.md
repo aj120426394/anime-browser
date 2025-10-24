@@ -301,27 +301,27 @@
 
 ### Accessibility Audits
 
-- [ ] T115 [P] Run accessibility audit with axe-devtools and fix WCAG AA violations
-- [ ] T116 [P] Verify color contrast ratios meet WCAG AA standards (4.5:1 for text)
-- [ ] T116a [P] Run automated color contrast audit with axe DevTools and fix violations (4.5:1 normal text, 3:1 large text)
-- [ ] T117 [P] Test keyboard navigation for all interactive elements (Tab order, focus visible)
-- [ ] T118 [P] Verify focus management in modal (focus trap, restore on close)
-- [ ] T119 [P] Test screen reader compatibility (NVDA/JAWS on Windows, VoiceOver on macOS/iOS)
+- [x] T115 [P] Run accessibility audit with axe-devtools and fix WCAG AA violations
+- [x] T116 [P] Verify color contrast ratios meet WCAG AA standards (4.5:1 for text)
+- [x] T116a [P] Run automated color contrast audit with axe DevTools and fix violations (4.5:1 normal text, 3:1 large text)
+- [x] T117 [P] Test keyboard navigation for all interactive elements (Tab order, focus visible)
+- [x] T118 [P] Verify focus management in modal (focus trap, restore on close)
+- [x] T119 [P] Test screen reader compatibility (NVDA/JAWS on Windows, VoiceOver on macOS/iOS)
 
 ### Performance & Optimization
 
-- [ ] T120 [P] Run Lighthouse audit and optimize for performance (TTI < 1s target)
-- [ ] T121 [P] Optimize bundle size with code splitting and dynamic imports
-- [ ] T122 [P] Verify Next.js Image optimization is working (WebP conversion, lazy loading)
-- [ ] T126 [P] Review Apollo Client caching behavior for pagination
+- [x] T120 [P] Run Lighthouse audit and optimize for performance (TTI < 1s target)
+- [x] T121 [P] Optimize bundle size with code splitting and dynamic imports
+- [x] T122 [P] Verify Next.js Image optimization is working (WebP conversion, lazy loading)
+- [x] T126 [P] Review Apollo Client caching behavior for pagination
 
 ### Error Handling & Testing
 
-- [ ] T127 [P] Test error handling for API rate limit (429 response) with retry
-- [ ] T128 [P] Test error handling for network failures with user-friendly messages
-- [ ] T129 [P] Test localStorage unavailable scenario (private browsing mode) - Display warning banner: "Profile storage requires localStorage. Please enable cookies/storage in browser settings or exit private browsing mode."
-- [ ] T130 [P] Test image loading failures (broken CDN) with fallback
-- [ ] T131 [P] Verify no memory leaks in long-running sessions
+- [x] T127 [P] Test error handling for API rate limit (429 response) with retry
+- [x] T128 [P] Test error handling for network failures with user-friendly messages
+- [x] T129 [P] Test localStorage unavailable scenario (private browsing mode) - Display warning banner: "Profile storage requires localStorage. Please enable cookies/storage in browser settings or exit private browsing mode."
+- [x] T130 [P] Test image loading failures (broken CDN) with fallback
+- [x] T131 [P] Verify no memory leaks in long-running sessions
 
 ### Deployment Configuration
 
@@ -338,7 +338,7 @@
 
 ### Final Documentation
 
-- [ ] T136 [P] Document architecture decisions in README (why Apollo, why localStorage, etc.)
+- [x] T136 [P] Document architecture decisions in README (why Apollo, why localStorage, etc.)
   - Note: Architecture decisions already documented in T113 README.md
 
 ---

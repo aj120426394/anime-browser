@@ -5,7 +5,7 @@ import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
  * Connects to AniList GraphQL API with optimized caching for pagination
  */
 
-// HTTP link configuration for AniList GraphQL endpoint
+// HTTP link configuration for AniList GraphQL endpoint with error handling
 // credentials: "same-origin" - Only include credentials for same-origin requests (avoids CORS issues)
 // mode: "cors" - Explicitly enable CORS for cross-origin requests
 const httpLink = new HttpLink({
@@ -13,6 +13,60 @@ const httpLink = new HttpLink({
   credentials: "same-origin",
   fetchOptions: {
     mode: "cors",
+  },
+  // Enhanced error handling for network requests
+  fetch: async (uri, options) => {
+    let retries = 0;
+    const maxRetries = 3;
+    const retryDelay = 1000; // Start with 1 second delay
+
+    while (retries < maxRetries) {
+      try {
+        const response = await fetch(uri, options);
+
+        // Handle rate limiting (429 Too Many Requests)
+        if (response.status === 429) {
+          const retryAfter = parseInt(response.headers.get("Retry-After") || "60", 10);
+          const waitTime = retryAfter * 1000;
+
+          if (retries < maxRetries - 1) {
+            // Wait before retrying
+            await new Promise((resolve) => setTimeout(resolve, waitTime));
+            retries++;
+            continue;
+          }
+
+          // Return 429 response to be handled by Apollo error policy
+          return response;
+        }
+
+        // Handle other network errors with exponential backoff
+        if (!response.ok && response.status >= 500) {
+          if (retries < maxRetries - 1) {
+            const delay = retryDelay * Math.pow(2, retries); // Exponential backoff
+            await new Promise((resolve) => setTimeout(resolve, delay));
+            retries++;
+            continue;
+          }
+        }
+
+        return response;
+      } catch (error) {
+        // Network error - retry with exponential backoff
+        if (retries < maxRetries - 1) {
+          const delay = retryDelay * Math.pow(2, retries);
+          await new Promise((resolve) => setTimeout(resolve, delay));
+          retries++;
+          continue;
+        }
+
+        // Final attempt failed - throw error
+        throw error;
+      }
+    }
+
+    // Should not reach here, but fallback to final fetch attempt
+    return fetch(uri, options);
   },
 });
 

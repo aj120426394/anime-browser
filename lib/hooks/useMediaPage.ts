@@ -2,6 +2,7 @@
 
 import { useGetAnimePageQuery } from "@/lib/graphql/generated/operations";
 import { MediaItem, MediaItemSchema } from "@/lib/schema";
+import type { GetAnimePageQuery } from "@/lib/graphql/generated/operations";
 
 export interface UseMediaPageReturn {
   mediaItems: MediaItem[];
@@ -10,17 +11,23 @@ export interface UseMediaPageReturn {
   error: Error | null;
 }
 
+// Extract the Media type from GetAnimePageQuery
+// This is the proper type for individual media items returned from AniList
+type AniListMedia = NonNullable<NonNullable<GetAnimePageQuery["Page"]>["media"]>[number];
+
 /**
  * Transform AniList media object to internal MediaItem format
  * Extracts and normalizes fields from GraphQL response
  * @throws Throws if required fields missing (catches in hook)
  */
-function transformToMediaItem(anilistMedia: any): MediaItem {
+function transformToMediaItem(anilistMedia: AniListMedia | null | undefined): MediaItem | null {
+  if (!anilistMedia) return null;
+
   // Transform AniList API response to our internal MediaItem schema
   // Handles field mapping and type conversion
   const item = {
     id: anilistMedia.id?.toString() ?? "",
-    engTitle: anilistMedia.title?.english ?? anilistMedia.title?.romaji ?? "Unknown",
+    engTitle: anilistMedia.title?.english ?? "Unknown", // AniList query only includes english, not romaji
     nativeTitle: anilistMedia.title?.native ?? "",
     status: anilistMedia.status ?? "UNKNOWN",
     type: anilistMedia.type ?? "ANIME",
@@ -88,12 +95,13 @@ export function useMediaPage(page: number, perPage: number = 20): UseMediaPageRe
 
   // Transform AniList response items to internal MediaItem format
   const mediaItems = (data.Page.media ?? [])
-    .map((item: any) => {
+    .filter((item): item is AniListMedia => item !== null) // Filter out nulls first
+    .map((item) => {
       try {
         return transformToMediaItem(item);
       } catch (err) {
         // Log transformation errors but continue processing other items
-        console.error("Failed to transform media item:", item.id, err);
+        console.error("Failed to transform media item:", item?.id, err);
         return null;
       }
     })

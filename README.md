@@ -43,7 +43,18 @@ cd leonardo-web-challenge
 npm install
 ```
 
-3. **Configure environment variables**
+3. **Generate GraphQL types**
+
+Before running the app, generate TypeScript types from AniList GraphQL schema:
+
+```bash
+npm run codegen
+```
+
+This generates `lib/graphql/generated/operations.ts` with all query types and React hooks.
+These generated files are automatically excluded from git (see `.gitignore`).
+
+4. **Configure environment variables**
 
 ```bash
 # .env.local (created during setup)
@@ -69,6 +80,17 @@ Generate TypeScript types from AniList GraphQL schema:
 ```bash
 npm run codegen
 ```
+
+**Important**: Always run `npm run codegen` after:
+
+- Modifying GraphQL query files (`lib/graphql/queries/*.graphql`)
+- Updating `codegen.yml` configuration
+- Cloning the repository for the first time
+
+This generates:
+
+- `lib/graphql/generated/operations.ts` - Query types, variables, and React hooks
+- Fully typed `useGetAnimePageQuery()` hook with Apollo Client integration
 
 ### Testing
 

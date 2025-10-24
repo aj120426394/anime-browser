@@ -29,6 +29,9 @@ dist/
 *.log
 test-results/
 
+# GraphQL Generated
+lib/graphql/generated/
+
 # Playwright
 test-results/
 playwright-report/

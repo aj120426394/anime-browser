@@ -1,9 +1,9 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect } from "vitest";
 import { renderHook, waitFor } from "@testing-library/react";
 import { MockedProvider } from "@apollo/client/testing";
 import { ReactNode } from "react";
 import { useMediaPage } from "@/lib/hooks/useMediaPage";
-import { MediaItemSchema, PageInfoSchema } from "@/lib/schema";
+import { MediaItemSchema } from "@/lib/schema";
 import { GetAnimePageDocument } from "@/lib/graphql/generated/operations";
 
 describe("useMediaPage Hook", () => {

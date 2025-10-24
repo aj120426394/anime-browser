@@ -7,6 +7,7 @@ generates:
       - typescript
     config:
       useIndexSignature: true
+      enumsAsTypes: true
 
   lib/graphql/generated/operations.ts:
     plugins:
@@ -17,3 +18,4 @@ generates:
       withHooks: true
       withComponent: false
       importOperationTypesFrom: "./schema"
+      enumsAsTypes: true

@@ -1,14 +1,13 @@
 "use client";
 
-import { useQuery } from "@apollo/client";
-import { GET_ANIME_PAGE } from "@/lib/graphql/queries";
+import { useGetAnimePageQuery } from "@/lib/graphql/generated/operations";
 import { MediaItem, MediaItemSchema, PageInfo, PageInfoSchema } from "@/lib/schema";
 
 interface UseMediaPageReturn {
   mediaItems: MediaItem[];
   pageInfo: PageInfo | null;
   loading: boolean;
-  error: Error | undefined;
+  error: Error | null;
 }
 
 interface AniListMedia {
@@ -19,23 +18,20 @@ interface AniListMedia {
   };
   status: string;
   type: string;
-  startDate: { year: number | null; month: number | null; day: number | null } | null;
-  endDate: { year: number | null; month: number | null; day: number | null } | null;
+  startDate: {
+    year: number | null;
+    month: number | null;
+    day: number | null;
+  };
+  endDate: {
+    year: number | null;
+    month: number | null;
+    day: number | null;
+  };
   description: string | null;
   coverImage: {
-    large: string;
-    medium: string;
-  };
-}
-
-interface GetAnimePageData {
-  Page: {
-    pageInfo: {
-      currentPage: number;
-      hasNextPage: boolean;
-      perPage: number;
-    };
-    media: AniListMedia[];
+    large: string | null;
+    medium: string | null;
   };
 }
 
@@ -52,40 +48,58 @@ function transformToMediaItem(anilistMedia: AniListMedia): MediaItem {
     startDate: anilistMedia.startDate,
     endDate: anilistMedia.endDate,
     description: anilistMedia.description || "",
-    imageMedium: anilistMedia.coverImage.medium,
-    imageLarge: anilistMedia.coverImage.large,
+    imageMedium: anilistMedia.coverImage.medium || "",
+    imageLarge: anilistMedia.coverImage.large || "",
   };
 }
 
 /**
- * Hook to fetch and transform media data from AniList API
- * Handles pagination, loading, and error states
+ * Fetch and transform paginated anime data from AniList
+ * @param page - Current page number (1-indexed)
+ * @param perPage - Number of items per page (default 20, max 50)
+ * @returns Object containing mediaItems array, pageInfo, loading and error states
  */
 export function useMediaPage(page: number, perPage: number = 20): UseMediaPageReturn {
-  const { data, loading, error } = useQuery<GetAnimePageData>(GET_ANIME_PAGE, {
-    variables: { page, perPage },
-    skip: !page, // Skip query if no page provided
+  // Validate page parameter
+  const validPage = Math.max(1, Math.floor(page));
+  const validPerPage = Math.max(1, Math.min(perPage, 50)); // AniList max is 50
+
+  // Use the generated hook to fetch data
+  const { data, loading, error } = useGetAnimePageQuery({
+    variables: {
+      page: validPage,
+      perPage: validPerPage,
+    },
   });
 
-  if (!data?.Page) {
+  // Handle no data
+  if (!data || !data.Page) {
     return {
       mediaItems: [],
       pageInfo: null,
       loading,
-      error,
+      error: error || null,
     };
   }
 
   try {
+    // Transform and validate pageInfo
+    const pageInfoData = data.Page.pageInfo;
+    const pageInfo = pageInfoData
+      ? PageInfoSchema.parse({
+          currentPage: pageInfoData.currentPage,
+          hasNextPage: pageInfoData.hasNextPage,
+          perPage: pageInfoData.perPage,
+        })
+      : null;
+
     // Transform and validate media items
-    const mediaItems = data.Page.media
+    const mediaItems = (data.Page.media || [])
+      .filter((item): item is AniListMedia => Boolean(item))
       .map(transformToMediaItem)
       .map((item) => MediaItemSchema.parse(item));
 
-    // Validate page info
-    const pageInfo = PageInfoSchema.parse(data.Page.pageInfo);
-
-    return { mediaItems, pageInfo, loading, error };
+    return { mediaItems, pageInfo, loading, error: error || null };
   } catch (validationError) {
     console.error("Validation error:", validationError);
     return {

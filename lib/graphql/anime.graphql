@@ -1,0 +1,33 @@
+query GetAnimePage($page: Int!, $perPage: Int!) {
+  Page(page: $page, perPage: $perPage) {
+    pageInfo {
+      currentPage
+      hasNextPage
+      perPage
+    }
+    media(type: ANIME, sort: POPULARITY_DESC) {
+      id
+      title {
+        english
+        native
+      }
+      status
+      type
+      startDate {
+        year
+        month
+        day
+      }
+      endDate {
+        year
+        month
+        day
+      }
+      description(asHtml: false)
+      coverImage {
+        large
+        medium
+      }
+    }
+  }
+}

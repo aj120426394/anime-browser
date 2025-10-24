@@ -1,0 +1,14 @@
+{
+  "style": "default",
+  "tailwind": {
+    "config": "tailwind.config.js",
+    "css": "app/globals.css"
+  },
+  "rsc": false,
+  "tsx": true,
+  "import-alias": "@/",
+  "aliases": {
+    "@/components": "./components",
+    "@/lib": "./lib"
+  }
+}

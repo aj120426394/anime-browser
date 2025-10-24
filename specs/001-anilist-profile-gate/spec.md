@@ -151,7 +151,7 @@ As a reviewer or stakeholder, I can see the challenge version number displayed i
 - **FR-009**: System MUST display fetched data in a paginated format on the information page
 - **FR-010**: System MUST display images (cover art) for each anime/manga item
 - **FR-011**: System MUST implement pagination controls allowing users to navigate between pages
-- **FR-012**: System MUST use page size of 20 items per page (standard pagination size to balance performance and UX)
+- **FR-012**: System MUST use a configurable page size between 12-20 items per page with default of 20 (balances performance and UX while allowing optimization)
 - **FR-013**: System MUST support deep linking via ?page=N query parameter
 - **FR-014**: System MUST update the URL when pagination state changes
 - **FR-015**: System MUST display item details in a modal dialog when an item is clicked

@@ -52,6 +52,7 @@
 
 - [ ] T018 [P] Create Zod schemas in lib/schema.ts (Profile, MediaItem, PageInfo, PaginationState)
 - [ ] T019 [P] Create localStorage utilities in lib/storage.ts with SSR safety checks
+- [ ] T019a [P] Add localStorage availability detection and fallback UI in lib/storage.ts
 - [ ] T020 [P] Create GraphQL query in lib/graphql/queries.ts (GetAnimePage query)
 - [ ] T021 Run GraphQL Code Generator to generate types in lib/graphql/generated/
 - [ ] T022 Create Apollo Client configuration in lib/graphql/client.ts with InMemoryCache type policies
@@ -272,6 +273,7 @@
 - [ ] T114 [P] Add inline comments for non-obvious logic (Apollo cache config, SSR checks, sanitization)
 - [ ] T115 [P] Run accessibility audit with axe-devtools and fix WCAG AA violations
 - [ ] T116 [P] Verify color contrast ratios meet WCAG AA standards (4.5:1 for text)
+- [ ] T116a [P] Run automated color contrast audit with axe DevTools and fix violations (4.5:1 normal text, 3:1 large text)
 - [ ] T117 [P] Test keyboard navigation for all interactive elements (Tab order, focus visible)
 - [ ] T118 [P] Verify focus management in modal (focus trap, restore on close)
 - [ ] T119 [P] Test screen reader compatibility (NVDA/JAWS on Windows, VoiceOver on macOS/iOS)
@@ -284,7 +286,7 @@
 - [ ] T126 [P] Review Apollo Client caching behavior for pagination
 - [ ] T127 [P] Test error handling for API rate limit (429 response) with retry
 - [ ] T128 [P] Test error handling for network failures with user-friendly messages
-- [ ] T129 [P] Test localStorage unavailable scenario (private browsing mode)
+- [ ] T129 [P] Test localStorage unavailable scenario (private browsing mode) - Display warning banner: "Profile storage requires localStorage. Please enable cookies/storage in browser settings or exit private browsing mode."
 - [ ] T130 [P] Test image loading failures (broken CDN) with fallback
 - [ ] T131 [P] Verify no memory leaks in long-running sessions
 - [ ] T132 [P] Create Vercel deployment configuration (vercel.json if needed)

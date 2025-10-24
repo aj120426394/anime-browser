@@ -217,7 +217,7 @@ Represents metadata about the current page of results from the AniList API.
 interface PageInfo {
   currentPage: number; // Current page number (1-indexed)
   hasNextPage: boolean; // Whether more pages exist
-  perPage: number; // Items per page (12-20 configurable)
+  perPage: number; // Items per page (fixed at 20)
 }
 ```
 

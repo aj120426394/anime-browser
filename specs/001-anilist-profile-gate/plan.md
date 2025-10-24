@@ -19,7 +19,7 @@ Build a Next.js 15 web application that gates access behind a profile collection
 **Project Type**: Web application (single frontend, no backend)
 **Performance Goals**: TTI < 1s, FCP < 1.5s, LCP < 2.5s, CLS < 0.1; pagination load < 2s
 **Constraints**: 90 requests/min to AniList API, WCAG AA compliance, no authentication required
-**Scale/Scope**: ~50 anime items per page, 12-20 items displayed per page, ~5 main components, ~10 utility functions
+**Scale/Scope**: ~50 anime items per page, 20 items displayed per page (fixed), ~5 main components, ~10 utility functions
 
 ## Constitution Check
 

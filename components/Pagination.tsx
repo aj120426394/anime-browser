@@ -72,16 +72,20 @@ export function Pagination({
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1 || isLoading}
         aria-label="Previous page"
+        className="hidden sm:flex"
       >
         Previous
       </Button>
 
       {/* Page Numbers */}
-      <div className="flex items-center gap-1 mx-2">
+      <div className="flex items-center gap-1 mx-1 sm:mx-2">
         {pageNumbers.map((page, index) => {
           if (page === "...") {
             return (
-              <span key={`ellipsis-${index}`} className="px-2 py-1 text-muted-foreground">
+              <span
+                key={`ellipsis-${index}`}
+                className="px-2 py-1 text-muted-foreground text-sm sm:text-base"
+              >
                 ...
               </span>
             );
@@ -99,6 +103,7 @@ export function Pagination({
               disabled={isLoading}
               aria-label={`Go to page ${pageNum}`}
               aria-current={isCurrentPage ? "page" : undefined}
+              className="h-9 px-2 sm:h-11 sm:px-8 text-xs sm:text-sm"
             >
               {pageNum}
             </Button>
@@ -113,12 +118,15 @@ export function Pagination({
         onClick={() => onPageChange(currentPage + 1)}
         disabled={!hasNextPage || isLoading}
         aria-label="Next page"
+        className="hidden sm:flex"
       >
         Next
       </Button>
 
       {/* Page Info */}
-      <span className="text-sm text-muted-foreground ml-4">Page {currentPage}</span>
+      <span className="text-xs sm:text-sm text-muted-foreground ml-2 sm:ml-4">
+        Page {currentPage}
+      </span>
     </div>
   );
 }

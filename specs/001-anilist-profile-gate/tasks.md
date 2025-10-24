@@ -128,7 +128,7 @@
 - [x] T058 [US2] Add loading skeleton for MediaGrid during data fetch
 - [x] T059 [US2] Add error handling for API failures with user-friendly messages
 - [x] T060 [US2] Add empty state when no results returned from API
-- [ ] T061 [US2] Configure Apollo Client retry logic with exponential backoff (250ms → 500ms → 1s)
+- [x] T061 [US2] Configure Apollo Client retry logic with exponential backoff (250ms → 500ms → 1s)
 - [x] T062 [US2] Test responsive grid layout on mobile (1-col) and desktop (2-4 cols)
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently

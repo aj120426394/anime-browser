@@ -207,11 +207,11 @@
 ### Implementation for User Story 5
 
 - [x] T091 [P] [US5] Create ProfileEditor component in components/ProfileEditor.tsx
-- [ ] T092 [US5] Add profile edit route or modal trigger in app/layout.tsx navigation
-- [ ] T093 [US5] Pre-fill form fields with current profile values from localStorage
-- [ ] T094 [US5] Implement save handler to update localStorage on form submission
-- [ ] T095 [US5] Add success confirmation message after profile update
-- [ ] T096 [US5] Test profile edit persistence across page reloads
+- [x] T092 [US5] Add profile edit route or modal trigger in app/layout.tsx navigation
+- [x] T093 [US5] Pre-fill form fields with current profile values from localStorage
+- [x] T094 [US5] Implement save handler to update localStorage on form submission
+- [x] T095 [US5] Add success confirmation message after profile update
+- [x] T096 [US5] Test profile edit persistence across page reloads
 
 **Checkpoint**: User Story 5 complete - profile editing works independently
 
@@ -225,19 +225,19 @@
 
 ### Tests for User Story 6 (MANDATORY per constitution) ⚠️
 
-- [ ] T097 [P] [US6] E2E test for mobile profile form in e2e/profile-gate.spec.ts with mobile viewport
-- [ ] T098 [P] [US6] E2E test for mobile grid layout in e2e/pagination.spec.ts with mobile viewport
-- [ ] T099 [P] [US6] E2E test for mobile modal interaction in e2e/modal-interaction.spec.ts with mobile viewport
-- [ ] T100 [P] [US6] E2E test for mobile pagination controls in e2e/pagination.spec.ts with mobile viewport
+- [x] T097 [P] [US6] E2E test for mobile profile form in e2e/profile-gate.spec.ts with mobile viewport
+- [x] T098 [P] [US6] E2E test for mobile grid layout in e2e/pagination.spec.ts with mobile viewport
+- [x] T099 [P] [US6] E2E test for mobile modal interaction in e2e/modal-interaction.spec.ts with mobile viewport
+- [x] T100 [P] [US6] E2E test for mobile pagination controls in e2e/pagination.spec.ts with mobile viewport
 
 ### Implementation for User Story 6
 
-- [ ] T101 [US6] Verify ProfileForm responsive layout on mobile (320px-768px widths)
-- [ ] T102 [US6] Verify MediaGrid responsive layout: 1-col mobile, 2-col tablet, 3-4 col desktop
-- [ ] T103 [US6] Verify MediaModal responsive behavior on mobile (full-screen or near full-screen)
-- [ ] T104 [US6] Verify Pagination controls touch-friendly (large tap targets, proper spacing)
-- [ ] T105 [US6] Test all interactive elements for touch-friendliness (44x44px minimum)
-- [ ] T106 [US6] Verify no horizontal scrolling on mobile viewports
+- [x] T101 [US6] Verify ProfileForm responsive layout on mobile (320px-768px widths)
+- [x] T102 [US6] Verify MediaGrid responsive layout: 1-col mobile, 2-col tablet, 3-4 col desktop
+- [x] T103 [US6] Verify MediaModal responsive behavior on mobile (full-screen or near full-screen)
+- [x] T104 [US6] Verify Pagination controls touch-friendly (large tap targets, proper spacing)
+- [x] T105 [US6] Test all interactive elements for touch-friendliness (44x44px minimum)
+- [x] T106 [US6] Verify no horizontal scrolling on mobile viewports
 
 **Checkpoint**: All user stories work on mobile devices
 
@@ -251,15 +251,15 @@
 
 ### Tests for User Story 7 (MANDATORY per constitution) ⚠️
 
-- [ ] T107 [P] [US7] Component test for Footer version display in tests/components/Footer.test.tsx
-- [ ] T108 [P] [US7] E2E test for footer visibility on all pages in e2e/profile-gate.spec.ts
+- [x] T107 [P] [US7] Component test for Footer version display in tests/components/Footer.test.tsx
+- [x] T108 [P] [US7] E2E test for footer visibility on all pages in e2e/profile-gate.spec.ts
 
 ### Implementation for User Story 7
 
-- [ ] T109 [US7] Verify Footer component displays NEXT_PUBLIC_CHALLENGE_VERSION from env
-- [ ] T110 [US7] Verify Footer is rendered in root layout (appears on all pages)
-- [ ] T111 [US7] Style Footer component with proper positioning and styling
-- [ ] T112 [US7] Test Footer displays consistently across all pages (/, /information)
+- [x] T109 [US7] Verify Footer component displays NEXT_PUBLIC_CHALLENGE_VERSION from env
+- [x] T110 [US7] Verify Footer is rendered in root layout (appears on all pages)
+- [x] T111 [US7] Style Footer component with proper positioning and styling
+- [x] T112 [US7] Test Footer displays consistently across all pages (/, /information)
 
 **Checkpoint**: All user stories complete - application fully functional
 

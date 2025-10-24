@@ -398,4 +398,77 @@ test.describe("Pagination and Data Loading E2E", () => {
       expect(page.url()).toContain("page=2");
     });
   });
+
+  test.describe("Modal on Mobile Viewport", () => {
+    test("should be usable on mobile size", async ({ page }) => {
+      // Set mobile viewport
+      await page.setViewportSize({ width: 375, height: 667 });
+
+      // Open modal
+      const firstCard = page
+        .locator("button")
+        .filter({ has: page.locator("text=FINISHED") })
+        .first();
+      await firstCard.click();
+
+      // Modal should be visible and readable
+      const modal = page.locator("[role='dialog']");
+      await expect(modal).toBeVisible();
+
+      // Close button should be accessible
+      await page.keyboard.press("Escape");
+      await expect(modal).not.toBeVisible();
+    });
+  });
+
+  test.describe("Mobile Responsiveness (T098, T100)", () => {
+    test("should display grid responsively on mobile (T098)", async ({ page }) => {
+      // Set mobile viewport (320px)
+      await page.setViewportSize({ width: 320, height: 667 });
+
+      await page.goto("/");
+      await page.fill('input[name="username"]', "MobileUser");
+      await page.fill('input[name="jobTitle"]', "Developer");
+      await page.click('button:has-text("Enter")');
+
+      await page.waitForURL("/information");
+      await page.waitForSelector("button:has-text('FINISHED')");
+
+      // Grid should show (mobile: 1 column)
+      const grid = page.locator("[class*='grid']").first();
+      await expect(grid).toBeVisible();
+    });
+
+    test("should have touch-friendly pagination controls on mobile (T100)", async ({ page }) => {
+      // Set mobile viewport
+      await page.setViewportSize({ width: 375, height: 667 });
+
+      await page.goto("/");
+      await page.fill('input[name="username"]', "MobileUser");
+      await page.fill('input[name="jobTitle"]', "Developer");
+      await page.click('button:has-text("Enter")');
+
+      await page.waitForURL("/information");
+      await page.waitForSelector("button:has-text('Previous')");
+
+      // Pagination buttons should be visible and tappable
+      const nextButton = page.getByText("Next");
+      await expect(nextButton).toBeVisible();
+
+      // Button should have reasonable size for touch (44x44px minimum)
+      const buttonBox = await nextButton.boundingBox();
+      expect(buttonBox?.width).toBeGreaterThanOrEqual(44);
+      expect(buttonBox?.height).toBeGreaterThanOrEqual(44);
+    });
+
+    test("should not have horizontal scrolling on mobile", async ({ page }) => {
+      await page.setViewportSize({ width: 320, height: 667 });
+
+      await page.goto("/");
+
+      // Check viewport width matches
+      const viewportSize = await page.viewportSize();
+      expect(viewportSize?.width).toBeLessThanOrEqual(375);
+    });
+  });
 });

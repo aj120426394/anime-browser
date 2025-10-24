@@ -211,4 +211,58 @@ test.describe("Profile Gate", () => {
       await expect(profileDisplay).toBeVisible();
     }
   });
+
+  test("should display footer on home page (T108)", async ({ page }) => {
+    await page.goto("/");
+
+    // Footer should be visible
+    const footer = page.getByText(/v\d+\.\d+/) || page.getByText(/challenge version/i);
+    await expect(footer).toBeVisible();
+  });
+
+  test("should display footer on information page (T108)", async ({ page }) => {
+    // Setup profile first
+    await page.goto("/");
+    await page.fill('input[name="username"]', "TestUser");
+    await page.fill('input[name="jobTitle"]', "Engineer");
+    await page.click('button:has-text("Enter")');
+
+    // Wait for redirect
+    await expect(page).toHaveURL(/\/information/);
+
+    // Footer should be visible
+    const footer = page.getByText(/v\d+\.\d+/) || page.getByText(/challenge version/i);
+    await expect(footer).toBeVisible();
+  });
+
+  test("should have mobile-friendly profile form (T097)", async ({ page }) => {
+    // Set mobile viewport (320px width)
+    await page.setViewportSize({ width: 320, height: 568 });
+
+    await page.goto("/");
+
+    // All form elements should be visible and usable
+    await expect(page.getByRole("heading", { name: /profile/i })).toBeVisible();
+    await expect(page.getByLabel(/username/i)).toBeVisible();
+    await expect(page.getByLabel(/job title/i)).toBeVisible();
+
+    const submitButton = page.getByRole("button", { name: /submit|enter/i });
+    await expect(submitButton).toBeVisible();
+
+    // Form should be usable on mobile
+    const usernameInput = page.getByLabel(/username/i);
+    const jobTitleInput = page.getByLabel(/job title/i);
+
+    await usernameInput.fill("MobileTestUser");
+    await jobTitleInput.fill("Mobile Developer");
+
+    // Button should be clickable
+    await expect(submitButton).toBeEnabled();
+
+    // Submit should work
+    await submitButton.click();
+
+    // Should redirect
+    await expect(page).toHaveURL(/\/information/);
+  });
 });

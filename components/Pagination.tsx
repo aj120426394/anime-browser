@@ -68,7 +68,7 @@ export function Pagination({
       {/* Previous Button */}
       <Button
         variant="outline"
-        size="sm"
+        size="lg"
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1 || isLoading}
         aria-label="Previous page"
@@ -94,7 +94,7 @@ export function Pagination({
             <Button
               key={pageNum}
               variant={isCurrentPage ? "default" : "outline"}
-              size="sm"
+              size="lg"
               onClick={() => onPageChange(pageNum)}
               disabled={isLoading}
               aria-label={`Go to page ${pageNum}`}
@@ -109,7 +109,7 @@ export function Pagination({
       {/* Next Button */}
       <Button
         variant="outline"
-        size="sm"
+        size="lg"
         onClick={() => onPageChange(currentPage + 1)}
         disabled={!hasNextPage || isLoading}
         aria-label="Next page"

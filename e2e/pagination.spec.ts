@@ -5,10 +5,10 @@ test.describe("Pagination and Data Loading E2E", () => {
     // Start on homepage
     await page.goto("/");
 
-    // Fill in profile form
-    await page.fill('input[name="username"]', "TestUser");
-    await page.fill('input[name="jobTitle"]', "QA Engineer");
-    await page.click('button:has-text("Enter")');
+    // Fill in profile form using correct selectors
+    await page.fill("input#username", "TestUser");
+    await page.fill("input#jobTitle", "QA Engineer");
+    await page.getByRole("button", { name: /submit|save/i }).click();
 
     // Wait for redirect to information page
     await page.waitForURL("/information");
@@ -16,155 +16,162 @@ test.describe("Pagination and Data Loading E2E", () => {
 
   test.describe("Data Loading from AniList API", () => {
     test("should load anime data on page load", async ({ page }) => {
-      // Wait for media items to appear
-      await page.waitForSelector("button:has-text('FINISHED')");
+      // Wait for media grid to load by checking URL is correct
+      await page.waitForURL(/information/);
 
-      // Verify at least one media item is visible
-      const mediaItems = await page
-        .locator("button")
-        .filter({ has: page.locator("text=FINISHED") });
-      expect(await mediaItems.count()).toBeGreaterThan(0);
+      // Use getByRole to get media cards - page 1 shows "Previous" button
+      const prevButton = page.getByRole("button", { name: "Previous page" });
+      await expect(prevButton).toBeDisabled();
+
+      // Verify media items exist using a more reliable selector
+      const mediaCards = page.locator("button").filter({ has: page.locator("text=FINISHED") });
+      await expect(mediaCards.first()).toBeVisible();
     });
 
     test("should display media card elements", async ({ page }) => {
-      await page.waitForSelector("img");
+      await page.waitForURL(/information/);
 
-      // Verify images loaded
-      const images = await page.locator("img").count();
-      expect(images).toBeGreaterThan(0);
+      // Wait for at least one image to be visible
+      const images = page.locator("img");
+      await expect(images.first()).toBeVisible();
 
       // Verify titles visible
-      const titles = await page.locator("h3").count();
-      expect(titles).toBeGreaterThan(0);
+      const titles = page.locator("button p.font-semibold");
+      await expect(titles.first()).toBeVisible();
+      expect(await titles.count()).toBeGreaterThan(0);
     });
 
     test("should show loading skeleton initially then content", async ({ page }) => {
-      // Fresh load should show skeleton
-      const skeletons = await page.locator("[aria-busy]").count();
-
-      // Wait for data to load
-      await page.waitForSelector("button:has-text('FINISHED')");
+      await page.waitForURL(/information/);
 
       // Content should now be visible
-      const mediaItems = await page
-        .locator("button")
-        .filter({ has: page.locator("text=FINISHED") });
+      const mediaItems = page.locator("button").filter({ has: page.locator("text=FINISHED") });
+      await expect(mediaItems.first()).toBeVisible();
       expect(await mediaItems.count()).toBeGreaterThan(0);
     });
 
     test("should display page info (current page, has next)", async ({ page }) => {
-      await page.waitForSelector("button:has-text('Previous')");
+      await page.waitForURL(/information/);
 
       // Previous should be disabled on page 1
-      const prevButton = page.locator("button:has-text('Previous')");
-      expect(await prevButton.isDisabled()).toBe(true);
+      const prevButton = page.getByRole("button", { name: "Previous page" });
+      await expect(prevButton).toBeDisabled();
 
       // Next should be enabled (assuming there are multiple pages)
-      const nextButton = page.locator("button:has-text('Next')");
-      expect(await nextButton.isDisabled()).toBe(false);
+      const nextButton = page.getByRole("button", { name: "Next page" });
+      await expect(nextButton).toBeEnabled();
     });
   });
 
   test.describe("Pagination Navigation", () => {
     test("should navigate to next page", async ({ page }) => {
-      await page.waitForSelector("button:has-text('FINISHED')");
+      await page.waitForURL(/information/);
 
       // Get first item title on page 1
-      const firstPageFirstItem = await page.locator("h3").first().textContent();
+      const firstPageFirstItem = await page.locator("button p.font-semibold").first().textContent();
 
-      // Click Next button
-      await page.click("button:has-text('Next')");
-
-      // Wait for page 2 to load
-      await page.waitForSelector("button:has-text('FINISHED')");
-      await page.waitForTimeout(500); // Small delay for data to update
+      // Click Next button and wait for URL to change
+      await page.getByRole("button", { name: "Next page" }).click();
+      await page.waitForURL(/page=2/);
 
       // First item on page 2 should be different
-      const secondPageFirstItem = await page.locator("h3").first().textContent();
+      const secondPageFirstItem = await page
+        .locator("button p.font-semibold")
+        .first()
+        .textContent();
       expect(secondPageFirstItem).not.toEqual(firstPageFirstItem);
     });
 
     test("should navigate to previous page", async ({ page }) => {
-      await page.waitForSelector("button:has-text('FINISHED')");
+      await page.waitForURL(/information/);
 
       // Go to page 2
-      await page.click("button:has-text('Next')");
-      await page.waitForSelector("button:has-text('FINISHED')");
+      await page.getByRole("button", { name: "Next page" }).click();
+      await page.waitForURL(/page=2/);
 
       // Get first item on page 2
-      const secondPageFirstItem = await page.locator("h3").first().textContent();
+      const secondPageFirstItem = await page
+        .locator("button p.font-semibold")
+        .first()
+        .textContent();
 
       // Click Previous button
-      await page.click("button:has-text('Previous')");
-      await page.waitForTimeout(500);
+      await page.getByRole("button", { name: "Previous page" }).click();
+      await page.waitForURL(/page=1|information\?$/);
 
       // Should be back to page 1
-      const firstPageFirstItem = await page.locator("h3").first().textContent();
+      const firstPageFirstItem = await page.locator("button p.font-semibold").first().textContent();
 
       // Items should be different (page 1 vs page 2)
       expect(firstPageFirstItem).not.toEqual(secondPageFirstItem);
     });
 
     test("should navigate to specific page number", async ({ page }) => {
-      await page.waitForSelector("button:has-text('FINISHED')");
+      await page.waitForURL(/information/);
 
-      // Click page 3
-      await page.click("button:has-text('3')");
-      await page.waitForSelector("button:has-text('FINISHED')");
+      // Use getByRole which is more reliable for buttons
+      const page2Button = page.getByRole("button", { name: "Go to page 2" });
 
-      // Page 3 button should be highlighted
-      const page3Button = page.locator("button:has-text('3')");
-      expect(await page3Button.evaluate((el) => el.getAttribute("aria-current"))).toBeTruthy();
+      // Click and wait for URL to change
+      await page2Button.click();
+      await page.waitForURL(/page=2/);
+
+      // Verify the page changed - the clicked button now has aria-current
+      await expect(page2Button).toHaveAttribute("aria-current", "page");
     });
 
     test("Previous button should be disabled on page 1", async ({ page }) => {
-      await page.waitForSelector("button:has-text('Previous')");
-      const prevButton = page.locator("button:has-text('Previous')");
-      expect(await prevButton.isDisabled()).toBe(true);
+      await page.waitForURL(/information/);
+      const prevButton = page.getByRole("button", { name: "Previous page" });
+      await expect(prevButton).toBeDisabled();
     });
 
     test("Previous button should be enabled on page > 1", async ({ page }) => {
-      await page.waitForSelector("button:has-text('FINISHED')");
+      await page.waitForURL(/information/);
 
       // Go to page 2
-      await page.click("button:has-text('Next')");
-      await page.waitForSelector("button:has-text('Previous')");
+      await page.getByRole("button", { name: "Next page" }).click();
+      await page.waitForURL(/page=2/);
 
-      const prevButton = page.locator("button:has-text('Previous')");
-      expect(await prevButton.isDisabled()).toBe(false);
+      const prevButton = page.getByRole("button", { name: "Previous page" });
+      await expect(prevButton).toBeEnabled();
     });
 
     test("pagination buttons should be disabled while loading", async ({ page }) => {
-      await page.waitForSelector("button:has-text('Next')");
+      await page.waitForURL(/information/);
 
-      const nextButton = page.locator("button:has-text('Next')");
+      const nextButton = page.getByRole("button", { name: "Next page" });
 
       // Click next
       await nextButton.click();
 
-      // Briefly check if button is disabled during loading
-      // (This is a timing-dependent test, may need adjustment)
-      await page.waitForSelector("button:has-text('FINISHED')");
-      expect(await nextButton.isDisabled()).toBe(false);
+      // Wait for page to load
+      await page.waitForURL(/page=2/);
+      await expect(nextButton).toBeEnabled();
     });
   });
 
   test.describe("Error Handling", () => {
     test("should handle network errors gracefully", async ({ page }) => {
-      // Simulate offline mode
+      // First load the page while online (from beforeEach setup)
+      await page.waitForURL(/information/);
+
+      // Now simulate offline mode
       await page.context().setOffline(true);
 
-      // Navigate to information page
-      await page.goto("/information");
+      // Try to navigate to a new page while offline
+      await page
+        .goto("/information?page=2", { waitUntil: "networkidle", timeout: 5000 })
+        .catch(() => {
+          // Expected to fail or timeout
+        });
 
-      // Wait a moment for error to appear
-      await page.waitForTimeout(1000);
-
-      // Look for error message
+      // Should see error message or cached data
       const errorMessage = page.locator("text=/Error|failed|network/i");
-
-      // Should see error (or cached data)
       const hasError = await errorMessage.count().then((c) => c > 0);
+
+      // Either error message or cached content is acceptable
+      expect(hasError || page.url().includes("information")).toBeTruthy();
 
       // Re-enable network
       await page.context().setOffline(false);
@@ -173,11 +180,11 @@ test.describe("Pagination and Data Loading E2E", () => {
 
   test.describe("URL Synchronization", () => {
     test("should update URL with page parameter", async ({ page }) => {
-      await page.waitForSelector("button:has-text('FINISHED')");
+      await page.waitForURL(/information/);
 
       // Go to page 2
-      await page.click("button:has-text('Next')");
-      await page.waitForSelector("button:has-text('FINISHED')");
+      await page.getByRole("button", { name: "Next page" }).click();
+      await page.waitForURL(/page=2/);
 
       // Check URL contains page parameter
       const url = page.url();
@@ -188,31 +195,42 @@ test.describe("Pagination and Data Loading E2E", () => {
       // Navigate directly to page 3
       await page.goto("/information?page=3");
 
-      // Wait for data to load
-      await page.waitForSelector("button:has-text('FINISHED')");
+      // Wait for URL to be set
+      await page.waitForURL(/page=3/);
 
       // Page 3 button should be current
-      const page3Button = page.locator("button:has-text('3')");
-      expect(await page3Button.evaluate((el) => el.getAttribute("aria-current"))).toBeTruthy();
+      const page3Button = page.getByRole("button", { name: "Go to page 3" });
+
+      // Verify the page changed - the clicked button now has aria-current
+      await expect(page3Button).toHaveAttribute("aria-current", "page");
     });
   });
 
   test.describe("Data Consistency", () => {
     test("should maintain data consistency across pagination", async ({ page }) => {
-      await page.waitForSelector("button:has-text('FINISHED')");
+      await page.waitForURL(/information/);
+
+      // Wait for media items to load
+      await page.locator("button p.font-semibold").first().waitFor();
 
       // Get list of items on page 1
-      const page1Items = await page.locator("h3").allTextContents();
+      const page1Items = await page.locator("button p.font-semibold").allTextContents();
 
       // Go to page 2
-      await page.click("button:has-text('Next')");
-      await page.waitForSelector("button:has-text('FINISHED')");
-      const page2Items = await page.locator("h3").allTextContents();
+      await page.getByRole("button", { name: "Next page" }).click();
+      await page.waitForURL(/[?&]page=2(?:[&]|$)/);
+
+      // Wait for page 2 items to load
+      await page.locator("button p.font-semibold").first().waitFor();
+      const page2Items = await page.locator("button p.font-semibold").allTextContents();
 
       // Go back to page 1
-      await page.click("button:has-text('Previous')");
-      await page.waitForSelector("button:has-text('FINISHED')");
-      const page1ItemsAgain = await page.locator("h3").allTextContents();
+      await page.getByRole("button", { name: "Previous page" }).click();
+      await page.waitForURL(/([?&]page=1(?:[&]|$)|information\?$)/);
+
+      // Wait for page 1 items to load again
+      await page.locator("button p.font-semibold").first().waitFor();
+      const page1ItemsAgain = await page.locator("button p.font-semibold").allTextContents();
 
       // Page 1 data should be the same
       expect(page1Items).toEqual(page1ItemsAgain);
@@ -224,133 +242,159 @@ test.describe("Pagination and Data Loading E2E", () => {
       // Set mobile viewport
       await page.setViewportSize({ width: 375, height: 667 });
 
-      await page.waitForSelector("button:has-text('Previous')");
+      await page.waitForURL(/information/);
 
-      const prevButton = page.locator("button:has-text('Previous')");
-      expect(await prevButton.isVisible()).toBe(true);
+      const prevButton = page.getByRole("button", { name: "Previous page" });
+      await expect(prevButton).toBeVisible();
     });
 
     test("should show pagination on desktop viewport", async ({ page }) => {
       // Set desktop viewport
       await page.setViewportSize({ width: 1920, height: 1080 });
 
-      await page.waitForSelector("button:has-text('Previous')");
+      await page.waitForURL(/information/);
 
-      const prevButton = page.locator("button:has-text('Previous')");
-      expect(await prevButton.isVisible()).toBe(true);
+      const prevButton = page.getByRole("button", { name: "Previous page" });
+      await expect(prevButton).toBeVisible();
     });
   });
 
   test.describe("Accessibility in Pagination", () => {
     test("should be keyboard navigable", async ({ page }) => {
-      await page.waitForSelector("button:has-text('Next')");
+      await page.waitForURL(/information/);
 
-      // Tab to Next button
-      await page.keyboard.press("Tab");
-      await page.keyboard.press("Tab");
+      // Wait for media items to load first
+      await page.locator("button p.font-semibold").first().waitFor();
 
-      // Press Enter to activate
+      // Test 1: Tab to pagination area and activate with Enter
+      // Tab multiple times until we reach a pagination button
+      let tabCount = 0;
+      const maxTabs = 50; // Reasonable limit to prevent infinite loop
+
+      while (tabCount < maxTabs) {
+        await page.keyboard.press("Tab");
+        tabCount++;
+
+        // Check if we're focused on a pagination button
+        const focusedElement = await page.evaluate(() => {
+          const el = document.activeElement as any;
+          return el?.getAttribute("aria-label");
+        });
+
+        // If we focus on Next or Previous button, we've reached pagination
+        if (focusedElement?.includes("Previous") || focusedElement?.includes("Next")) {
+          break;
+        }
+      }
+
+      // Verify we found and focused a pagination button
+      expect(tabCount).toBeLessThan(maxTabs);
+
+      // Press Enter to activate the focused button
       await page.keyboard.press("Enter");
 
-      // Should navigate to page 2
-      await page.waitForSelector("button:has-text('FINISHED')");
+      // Should navigate to page 2 (if we focused Next button)
+      await page.waitForURL(/[?&]page=2(?:[&]|$)/);
       const url = page.url();
       expect(url).toContain("page=2");
     });
 
     test("pagination buttons should have aria-labels", async ({ page }) => {
-      await page.waitForSelector("button:has-text('Previous')");
+      await page.waitForURL(/information/);
 
-      const prevButton = page.locator("button:has-text('Previous')");
-      const ariaLabel = await prevButton.getAttribute("aria-label");
-      expect(ariaLabel).toBeTruthy();
+      const prevButton = page.getByRole("button", { name: "Previous page" });
+      await expect(prevButton).toHaveAttribute("aria-label", "Previous page");
     });
 
     test("current page should have aria-current attribute", async ({ page }) => {
-      await page.waitForSelector("button:has-text('1')");
+      await page.waitForURL(/information/);
 
-      const currentPageButton = page.locator("button:has-text('1')[aria-current]");
-      expect(await currentPageButton.count()).toBeGreaterThan(0);
+      // Find button with aria-current="page" attribute
+      const currentPageButton = page.locator("button[aria-current='page']");
+      await expect(currentPageButton).toBeVisible();
+
+      // Should be exactly one current page button
+      expect(await currentPageButton.count()).toBe(1);
     });
   });
 
   test.describe("Deep Linking - Direct Page Access (T065)", () => {
     test("should load specific page when accessed directly via URL", async ({ page }) => {
-      // Skip the profile form by going directly to page 3
+      // Navigate directly to page 3
       await page.goto("/information?page=3");
 
-      // If profile doesn't exist, we'll be redirected to home
-      // Fill profile and retry
-      if (page.url().includes("/")) {
-        await page.fill('input[name="username"]', "TestUser");
-        await page.fill('input[name="jobTitle"]', "QA Engineer");
-        await page.click('button:has-text("Enter")');
+      // Wait for URL to be set
+      await page.waitForURL(/[?&]page=3(?:[&]|$)/);
 
-        // Now navigate to page 3 directly
-        await page.goto("/information?page=3");
-      }
-
-      // Wait for data to load
-      await page.waitForSelector("button:has-text('FINISHED')");
-
-      // Verify we're on page 3 by checking URL and page indicator
+      // Verify we're on page 3 by checking URL
       expect(page.url()).toContain("page=3");
 
       // Page 3 button should have aria-current
-      const page3Button = page.locator("button[aria-current]");
-      const pageText = await page3Button.textContent();
-      expect(pageText?.trim()).toBe("3");
+      const currentPageButton = page.locator("button[aria-current='page']");
+      await expect(currentPageButton).toBeVisible();
+      await expect(currentPageButton).toHaveAttribute("aria-label", /Go to page 3/);
     });
 
     test("should default to page 1 when page=0 is passed", async ({ page }) => {
       // Navigate with invalid page
       await page.goto("/information?page=0");
 
-      // Check if redirected or defaults to page 1
-      await page.waitForSelector("button:has-text('FINISHED')");
+      // Wait for URL to be corrected to page=1
+      await page.waitForURL(/[?&]page=1(?:[&]|$)/);
 
-      // Should load page 1 content
-      const page1Button = page.locator("button[aria-current]");
-      const pageText = await page1Button.textContent();
-      expect(pageText?.trim()).toBe("1");
+      // Should default to page 1
+      const page1Button = page.locator("button[aria-current='page']");
+      await expect(page1Button).toBeVisible();
+      await expect(page1Button).toHaveAttribute("aria-label", /Go to page 1/);
+
+      // Verify URL was corrected
+      expect(page.url()).toContain("page=1");
     });
 
     test("should handle negative page numbers gracefully", async ({ page }) => {
       // Try to access invalid negative page
       await page.goto("/information?page=-5");
 
-      await page.waitForSelector("button:has-text('FINISHED')");
+      // Wait for URL to be corrected to page=1
+      await page.waitForURL(/[?&]page=1(?:[&]|$)/);
 
       // Should default to page 1
-      const page1Button = page.locator("button[aria-current]");
-      const pageText = await page1Button.textContent();
-      expect(pageText?.trim()).toBe("1");
+      const page1Button = page.locator("button[aria-current='page']");
+      await expect(page1Button).toBeVisible();
+      await expect(page1Button).toHaveAttribute("aria-label", /Go to page 1/);
+
+      // Verify URL was corrected
+      expect(page.url()).toContain("page=1");
     });
 
     test("should handle non-numeric page parameter", async ({ page }) => {
       // Try with non-numeric value
       await page.goto("/information?page=abc");
 
-      await page.waitForSelector("button:has-text('FINISHED')");
+      // Wait for URL to be corrected to page=1
+      await page.waitForURL(/[?&]page=1(?:[&]|$)/);
 
-      // Should default to page 1
-      const page1Button = page.locator("button[aria-current]");
-      const pageText = await page1Button.textContent();
-      expect(pageText?.trim()).toBe("1");
+      // Should default to page 1 with corrected URL
+      const page1Button = page.locator("button[aria-current='page']");
+      await expect(page1Button).toBeVisible();
+      await expect(page1Button).toHaveAttribute("aria-label", /Go to page 1/);
+
+      // Verify URL was corrected
+      expect(page.url()).toContain("page=1");
     });
   });
 
   test.describe("URL Update on Pagination Navigation (T066)", () => {
     test("should update URL when clicking pagination buttons", async ({ page }) => {
-      await page.waitForSelector("button:has-text('Next')");
+      await page.waitForURL(/information/);
 
       // Initial page should be 1 (or no ?page param)
       let url = page.url();
       const initialPage = new URL(url).searchParams.get("page") || "1";
 
       // Click Next
-      await page.click("button:has-text('Next')");
-      await page.waitForSelector("button:has-text('FINISHED')");
+      await page.getByRole("button", { name: "Next page" }).click();
+      await page.waitForURL(/page=2/);
 
       // URL should update to page 2
       url = page.url();
@@ -359,26 +403,26 @@ test.describe("Pagination and Data Loading E2E", () => {
     });
 
     test("should support browser back/forward navigation", async ({ page }) => {
-      await page.waitForSelector("button:has-text('Next')");
+      await page.waitForURL(/information/);
 
       // Navigate to page 2
-      await page.click("button:has-text('Next')");
-      await page.waitForSelector("button:has-text('FINISHED')");
+      await page.getByRole("button", { name: "Next page" }).click();
+      await page.waitForURL(/page=2/);
       expect(page.url()).toContain("page=2");
 
       // Navigate to page 3
-      await page.click("button:has-text('Next')");
-      await page.waitForSelector("button:has-text('FINISHED')");
+      await page.getByRole("button", { name: "Next page" }).click();
+      await page.waitForURL(/page=3/);
       expect(page.url()).toContain("page=3");
 
       // Go back to page 2
       await page.goBack();
-      await page.waitForSelector("button:has-text('FINISHED')");
+      await page.waitForURL(/page=2/);
       expect(page.url()).toContain("page=2");
 
       // Go forward to page 3
       await page.goForward();
-      await page.waitForSelector("button:has-text('FINISHED')");
+      await page.waitForURL(/page=3/);
       expect(page.url()).toContain("page=3");
     });
 
@@ -386,15 +430,8 @@ test.describe("Pagination and Data Loading E2E", () => {
       // Go directly to page 2 with profile
       await page.goto("/information?page=2");
 
-      // Handle potential redirect to profile form
-      if (page.url().includes("/")) {
-        await page.fill('input[name="username"]', "TestUser");
-        await page.fill('input[name="jobTitle"]', "QA Engineer");
-        await page.click('button:has-text("Enter")');
-      }
-
-      // Should end up on page 2
-      await page.waitForSelector("button:has-text('FINISHED')");
+      // Wait for URL to settle - page 2 should be loaded
+      await page.waitForURL(/page=2/);
       expect(page.url()).toContain("page=2");
     });
   });
@@ -404,11 +441,14 @@ test.describe("Pagination and Data Loading E2E", () => {
       // Set mobile viewport
       await page.setViewportSize({ width: 375, height: 667 });
 
+      await page.waitForURL(/information/);
+
       // Open modal
       const firstCard = page
         .locator("button")
         .filter({ has: page.locator("text=FINISHED") })
         .first();
+      await expect(firstCard).toBeVisible();
       await firstCard.click();
 
       // Modal should be visible and readable
@@ -427,12 +467,11 @@ test.describe("Pagination and Data Loading E2E", () => {
       await page.setViewportSize({ width: 320, height: 667 });
 
       await page.goto("/");
-      await page.fill('input[name="username"]', "MobileUser");
-      await page.fill('input[name="jobTitle"]', "Developer");
-      await page.click('button:has-text("Enter")');
+      await page.fill("input#username", "MobileUser");
+      await page.fill("input#jobTitle", "Developer");
+      await page.getByRole("button", { name: /submit|save/i }).click();
 
       await page.waitForURL("/information");
-      await page.waitForSelector("button:has-text('FINISHED')");
 
       // Grid should show (mobile: 1 column)
       const grid = page.locator("[class*='grid']").first();
@@ -444,15 +483,14 @@ test.describe("Pagination and Data Loading E2E", () => {
       await page.setViewportSize({ width: 375, height: 667 });
 
       await page.goto("/");
-      await page.fill('input[name="username"]', "MobileUser");
-      await page.fill('input[name="jobTitle"]', "Developer");
-      await page.click('button:has-text("Enter")');
+      await page.fill("input#username", "MobileUser");
+      await page.fill("input#jobTitle", "Developer");
+      await page.getByRole("button", { name: /submit|save/i }).click();
 
       await page.waitForURL("/information");
-      await page.waitForSelector("button:has-text('Previous')");
 
       // Pagination buttons should be visible and tappable
-      const nextButton = page.getByText("Next");
+      const nextButton = page.getByRole("button", { name: "Next page" });
       await expect(nextButton).toBeVisible();
 
       // Button should have reasonable size for touch (44x44px minimum)

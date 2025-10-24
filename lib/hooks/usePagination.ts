@@ -1,6 +1,7 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 interface UsePaginationReturn {
   currentPage: number;
@@ -16,7 +17,19 @@ export function usePagination(): UsePaginationReturn {
   const router = useRouter();
 
   // Parse current page from URL, default to 1
-  const currentPage = Math.max(1, parseInt(searchParams.get("page") || "1", 10));
+  // Handle non-numeric values by checking for NaN
+  const parsedPage = parseInt(searchParams.get("page") || "1", 10);
+  const isValidPage = !isNaN(parsedPage) && parsedPage >= 1;
+  const currentPage = isValidPage ? parsedPage : 1;
+
+  // If page parameter is invalid or out of bounds, correct the URL
+  useEffect(() => {
+    if (!isValidPage) {
+      const params = new URLSearchParams(searchParams);
+      params.set("page", "1");
+      router.replace(`?${params.toString()}`);
+    }
+  }, [isValidPage, searchParams, router]);
 
   // Navigate to a specific page
   const goToPage = (page: number) => {

@@ -5,10 +5,10 @@ test.describe("Modal Interaction E2E", () => {
     // Start on homepage
     await page.goto("/");
 
-    // Fill in profile form
-    await page.fill('input[name="username"]', "TestUser");
-    await page.fill('input[name="jobTitle"]', "QA Engineer");
-    await page.click('button:has-text("Enter")');
+    // Fill in profile form using correct selectors
+    await page.fill("input#username", "TestUser");
+    await page.fill("input#jobTitle", "QA Engineer");
+    await page.getByRole("button", { name: /submit|save/i }).click();
 
     // Wait for redirect to information page
     await page.waitForURL("/information");

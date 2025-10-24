@@ -109,16 +109,16 @@ describe("MediaCard Component", () => {
   });
 
   describe("Edge Cases", () => {
-    it("should handle very long titles", () => {
-      const longTitle = "A".repeat(100);
+    it("should clamp long titles", () => {
+      const longTitle = "A Very Long Anime Title That Goes On And On And On And Should Be Clamped";
       const itemLongTitle = {
         ...mockMediaItem,
         engTitle: longTitle,
       };
       render(<MediaCard item={itemLongTitle} />);
-      // Should render without crashing and use line-clamp
-      const titleElement = screen.getByText(expect.stringContaining("A"));
-      expect(titleElement).toHaveClass("line-clamp-2");
+      // Check that the title container has line-clamp class
+      const titleContainer = screen.getByText(/A Very Long Anime/);
+      expect(titleContainer).toHaveClass("line-clamp-2");
     });
 
     it("should handle missing description gracefully", () => {

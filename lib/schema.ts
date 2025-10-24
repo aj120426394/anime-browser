@@ -57,8 +57,8 @@ export const MediaItemSchema = z.object({
   startDate: FuzzyDateSchema,
   endDate: FuzzyDateSchema,
   description: z.string(),
-  imageMedium: z.string().url("Invalid medium image URL"),
-  imageLarge: z.string().url("Invalid large image URL"),
+  imageMedium: z.string().url("Invalid medium image URL").or(z.literal("")),
+  imageLarge: z.string().url("Invalid large image URL").or(z.literal("")),
 });
 
 export type MediaItem = z.infer<typeof MediaItemSchema>;

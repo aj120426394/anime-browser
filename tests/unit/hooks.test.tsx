@@ -58,10 +58,10 @@ describe("useMediaPage Hook", () => {
           },
           result: { data: createMockData(1, 3) },
         },
-      ];
+      ] as any;
 
       const wrapper = ({ children }: { children: ReactNode }) => (
-        <MockedProvider mocks={mocks} addTypename={true}>
+        <MockedProvider mocks={mocks}>
           {children}
         </MockedProvider>
       );
@@ -103,10 +103,10 @@ describe("useMediaPage Hook", () => {
           },
           result: { data: createMockData(2, 2) },
         },
-      ];
+      ] as any;
 
       const wrapper = ({ children }: { children: ReactNode }) => (
-        <MockedProvider mocks={mocks} addTypename={true}>
+        <MockedProvider mocks={mocks}>
           {children}
         </MockedProvider>
       );
@@ -128,12 +128,20 @@ describe("useMediaPage Hook", () => {
             query: GetAnimePageDocument,
             variables: { page: 1, perPage: 50 },
           },
-          result: { data: { ...createMockData(1, 5), Page: { ...createMockData(1, 5).Page, pageInfo: { ...createMockData(1, 5).Page.pageInfo, perPage: 50 } } } },
+          result: {
+            data: {
+              ...createMockData(1, 5),
+              Page: {
+                ...createMockData(1, 5).Page,
+                pageInfo: { ...createMockData(1, 5).Page.pageInfo, perPage: 50 },
+              },
+            },
+          },
         },
-      ];
+      ] as any;
 
       const wrapper = ({ children }: { children: ReactNode }) => (
-        <MockedProvider mocks={mocks} addTypename={true}>
+        <MockedProvider mocks={mocks}>
           {children}
         </MockedProvider>
       );
@@ -180,6 +188,7 @@ describe("useMediaPage Hook", () => {
         imageLarge: "",
       };
 
+      // Should not throw - schema allows empty strings for images
       expect(() => MediaItemSchema.parse(itemNoImages)).not.toThrow();
     });
 
@@ -207,21 +216,20 @@ describe("useMediaPage Hook", () => {
         {
           request: {
             query: GetAnimePageDocument,
-            variables: { page: 1, perPage: 20 }, // Should clamp to 1
+            variables: { page: 1, perPage: 20 },
           },
           result: { data: createMockData(1, 0) },
         },
-      ];
+      ] as any;
 
       const wrapper = ({ children }: { children: ReactNode }) => (
-        <MockedProvider mocks={mocks} addTypename={true}>
+        <MockedProvider mocks={mocks}>
           {children}
         </MockedProvider>
       );
 
       const { result } = renderHook(() => useMediaPage(0), { wrapper });
 
-      // Hook should convert 0 to 1
       expect(result.current).toBeDefined();
     });
 
@@ -230,14 +238,14 @@ describe("useMediaPage Hook", () => {
         {
           request: {
             query: GetAnimePageDocument,
-            variables: { page: 1, perPage: 50 }, // Should clamp to 50
+            variables: { page: 1, perPage: 50 },
           },
           result: { data: createMockData(1, 5) },
         },
-      ];
+      ] as any;
 
       const wrapper = ({ children }: { children: ReactNode }) => (
-        <MockedProvider mocks={mocks} addTypename={true}>
+        <MockedProvider mocks={mocks}>
           {children}
         </MockedProvider>
       );
@@ -258,10 +266,10 @@ describe("useMediaPage Hook", () => {
           },
           error: new Error("Network error"),
         },
-      ];
+      ] as any;
 
       const wrapper = ({ children }: { children: ReactNode }) => (
-        <MockedProvider mocks={mocks} addTypename={true}>
+        <MockedProvider mocks={mocks}>
           {children}
         </MockedProvider>
       );
@@ -272,7 +280,6 @@ describe("useMediaPage Hook", () => {
         expect(result.current.loading).toBe(false);
       });
 
-      // Should have error after network failure
       expect(result.current.error).toBeDefined();
       expect(result.current.mediaItems).toEqual([]);
     });
@@ -286,10 +293,10 @@ describe("useMediaPage Hook", () => {
           },
           result: { data: createMockData(1, 3) },
         },
-      ];
+      ] as any;
 
       const wrapper = ({ children }: { children: ReactNode }) => (
-        <MockedProvider mocks={mocks} addTypename={true}>
+        <MockedProvider mocks={mocks}>
           {children}
         </MockedProvider>
       );
@@ -312,12 +319,12 @@ describe("useMediaPage Hook", () => {
             query: GetAnimePageDocument,
             variables: { page: 1, perPage: 20 },
           },
-          result: { data: createMockData(1, 0) }, // Empty results
+          result: { data: createMockData(1, 0) },
         },
-      ];
+      ] as any;
 
       const wrapper = ({ children }: { children: ReactNode }) => (
-        <MockedProvider mocks={mocks} addTypename={true}>
+        <MockedProvider mocks={mocks}>
           {children}
         </MockedProvider>
       );
@@ -336,10 +343,10 @@ describe("useMediaPage Hook", () => {
           },
           result: { data: createMockData(1, 0) },
         },
-      ];
+      ] as any;
 
       const wrapper = ({ children }: { children: ReactNode }) => (
-        <MockedProvider mocks={mocks} addTypename={true}>
+        <MockedProvider mocks={mocks}>
           {children}
         </MockedProvider>
       );
@@ -358,10 +365,10 @@ describe("useMediaPage Hook", () => {
           },
           result: { data: createMockData(1, 3) },
         },
-      ];
+      ] as any;
 
       const wrapper = ({ children }: { children: ReactNode }) => (
-        <MockedProvider mocks={mocks} addTypename={true}>
+        <MockedProvider mocks={mocks}>
           {children}
         </MockedProvider>
       );
@@ -372,9 +379,9 @@ describe("useMediaPage Hook", () => {
         expect(result.current.loading).toBe(false);
       });
 
-      expect(
-        result.current.pageInfo === null || typeof result.current.pageInfo === "object"
-      ).toBe(true);
+      expect(result.current.pageInfo === null || typeof result.current.pageInfo === "object").toBe(
+        true
+      );
     });
   });
 });

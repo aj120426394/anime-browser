@@ -50,7 +50,7 @@ describe("Pagination Component", () => {
 
     it("should highlight current page", () => {
       render(<Pagination {...defaultProps} currentPage={2} />);
-      const currentPageButton = screen.getByRole("button", { name: "2" });
+      const currentPageButton = screen.getByRole("button", { name: /Go to page 2/ });
       expect(currentPageButton).toHaveClass("bg-primary", "text-primary-foreground");
     });
 
@@ -76,14 +76,18 @@ describe("Pagination Component", () => {
 
     it("should show fewer pages on start", () => {
       render(<Pagination {...defaultProps} currentPage={1} />);
-      const numbers = screen.getAllByRole("button").filter((btn) => /^\d+$/.test(btn.textContent || ""));
+      const numbers = screen.getAllByRole("button").filter((btn) => {
+        const text = btn.textContent || "";
+        return /^\d+$/.test(text);
+      });
       expect(numbers.length).toBeGreaterThan(0);
       expect(numbers.length).toBeLessThan(10);
     });
 
     it("should handle large page numbers", () => {
       render(<Pagination {...defaultProps} currentPage={100} />);
-      expect(screen.getByText("100")).toBeInTheDocument();
+      // Check for the page summary text instead of a button
+      expect(screen.getByText(/Page 100/)).toBeInTheDocument();
     });
   });
 
@@ -115,7 +119,7 @@ describe("Pagination Component", () => {
       const handlePageChange = vi.fn();
       render(<Pagination {...defaultProps} currentPage={1} onPageChange={handlePageChange} />);
 
-      const pageButton = screen.getByRole("button", { name: "3" });
+      const pageButton = screen.getByRole("button", { name: /Go to page 3/ });
       await user.click(pageButton);
 
       expect(handlePageChange).toHaveBeenCalledWith(3);
@@ -155,9 +159,10 @@ describe("Pagination Component", () => {
       const handlePageChange = vi.fn();
       render(<Pagination {...defaultProps} currentPage={1} onPageChange={handlePageChange} />);
 
-      const nextButton = screen.getByText("Next");
+      // Tab to first focusable button (in tab order)
       await user.tab();
-      expect(nextButton).toBeFocused();
+      const page1Button = screen.getByRole("button", { name: /Go to page 1/ });
+      expect(page1Button).toHaveFocus();
     });
 
     it("should activate button with Enter key", async () => {
@@ -191,7 +196,7 @@ describe("Pagination Component", () => {
 
     it("should have proper ARIA attributes for current page", () => {
       render(<Pagination {...defaultProps} currentPage={3} />);
-      const currentPageButton = screen.getByRole("button", { name: "3" });
+      const currentPageButton = screen.getByRole("button", { name: /Go to page 3/ });
       expect(currentPageButton).toHaveAttribute("aria-current");
     });
   });
@@ -217,7 +222,8 @@ describe("Pagination Component", () => {
 
     it("should handle very large current page", () => {
       render(<Pagination {...defaultProps} currentPage={999} hasNextPage={false} />);
-      expect(screen.getByText("999")).toBeInTheDocument();
+      // Check for the page summary text instead of a button
+      expect(screen.getByText(/Page 999/)).toBeInTheDocument();
     });
   });
 

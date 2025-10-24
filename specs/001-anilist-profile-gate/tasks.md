@@ -269,7 +269,7 @@
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T113 [P] Create comprehensive README.md with install, run, build, deploy instructions
+- [x] T113 [P] Create comprehensive README.md with install, run, build, deploy instructions
 - [ ] T114 [P] Add inline comments for non-obvious logic (Apollo cache config, SSR checks, sanitization)
 - [ ] T115 [P] Run accessibility audit with axe-devtools and fix WCAG AA violations
 - [ ] T116 [P] Verify color contrast ratios meet WCAG AA standards (4.5:1 for text)

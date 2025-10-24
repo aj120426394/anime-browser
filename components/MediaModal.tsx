@@ -36,11 +36,7 @@ export function MediaModal({ isOpen, item, onClose }: MediaModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent
-        className="max-w-2xl max-h-[90vh] overflow-y-auto"
-        data-testid="media-modal"
-        aria-labelledby="modal-title"
-      >
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto" data-testid="media-modal">
         <div className="space-y-6 pt-8">
           {/* Large Image */}
           <div className="relative w-full max-h-screen bg-muted rounded-lg overflow-hidden flex items-center justify-center">
@@ -63,9 +59,7 @@ export function MediaModal({ isOpen, item, onClose }: MediaModalProps) {
 
           {/* Title Section */}
           <div className="space-y-2">
-            <h2 id="modal-title" className="text-2xl font-bold">
-              {item.engTitle || "Unknown Title"}
-            </h2>
+            <h2 className="text-2xl font-bold">{item.engTitle || "Unknown Title"}</h2>
             {item.nativeTitle && (
               <p className="text-lg text-muted-foreground">{item.nativeTitle}</p>
             )}

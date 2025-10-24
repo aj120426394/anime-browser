@@ -8,6 +8,9 @@ import { useMediaPage } from "@/lib/hooks/useMediaPage";
 import { MediaGrid } from "@/components/MediaGrid";
 import { Pagination } from "@/components/Pagination";
 import { MediaModal } from "@/components/MediaModal";
+import { ProfileEditor } from "@/components/ProfileEditor";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { MediaItem } from "@/lib/schema";
 
 /**
@@ -19,12 +22,13 @@ import { MediaItem } from "@/lib/schema";
  */
 export default function InformationPage() {
   const router = useRouter();
-  const { profile, isStorageAvailable } = useProfile();
+  const { profile, isStorageAvailable, saveProfile } = useProfile();
   const { currentPage, goToPage } = usePagination();
   const { mediaItems, pageInfo, loading, error } = useMediaPage(currentPage, 20);
   const [storageChecked, setStorageChecked] = useState(false);
   const [selectedItem, setSelectedItem] = useState<MediaItem | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
 
   // Check if profile exists, redirect to gate if not
   useEffect(() => {
@@ -46,6 +50,12 @@ export default function InformationPage() {
     setSelectedItem(null);
   };
 
+  // Handle profile save
+  const handleProfileSave = (updatedProfile: any) => {
+    saveProfile(updatedProfile);
+    setIsEditProfileOpen(false);
+  };
+
   // Show loading while checking storage
   if (!storageChecked) {
     return (
@@ -61,7 +71,14 @@ export default function InformationPage() {
       <div className="border-b border-border sticky top-0 z-10 bg-background/95 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="space-y-2">
-            <h1 className="text-3xl font-bold">Anime Browser</h1>
+            <div className="flex items-center justify-between">
+              <h1 className="text-3xl font-bold">Anime Browser</h1>
+              {profile && (
+                <Button variant="outline" size="sm" onClick={() => setIsEditProfileOpen(true)}>
+                  Edit Profile
+                </Button>
+              )}
+            </div>
             {profile && (
               <p className="text-sm text-muted-foreground">
                 Welcome, <span className="font-semibold">{profile.username}</span> (
@@ -114,6 +131,18 @@ export default function InformationPage() {
 
       {/* Media Modal */}
       <MediaModal isOpen={isModalOpen} item={selectedItem} onClose={handleCloseModal} />
+
+      {/* Profile Edit Dialog */}
+      {profile && (
+        <Dialog open={isEditProfileOpen} onOpenChange={setIsEditProfileOpen}>
+          <DialogContent className="max-w-md">
+            <DialogTitle className="text-lg font-semibold">Edit Profile</DialogTitle>
+            <div className="space-y-4">
+              <ProfileEditor profile={profile} onSave={handleProfileSave} />
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 }

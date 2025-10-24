@@ -99,7 +99,6 @@ export function ProfileEditor({ profile, onSave }: ProfileEditorProps) {
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-md space-y-6">
       <div className="space-y-2">
-        <h2 className="text-2xl font-bold">Edit Profile</h2>
         <p className="text-sm text-muted-foreground">Update your profile information</p>
       </div>
 

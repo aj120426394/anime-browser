@@ -1,5 +1,6 @@
 import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 import { cn } from "@/lib/utils";
 
@@ -41,6 +42,9 @@ const DialogContent = React.forwardRef<
       {...props}
     >
       {children}
+      <VisuallyHidden asChild>
+        <DialogPrimitive.Title>Dialog</DialogPrimitive.Title>
+      </VisuallyHidden>
       <DialogPrimitive.Close className="absolute right-4 top-4 z-10 rounded-sm opacity-70 ring-offset-white transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-neutral-950 focus:ring-offset-2 disabled:pointer-events-none dark:ring-offset-neutral-950 dark:focus:ring-neutral-300">
         <span className="text-xl leading-none">✕</span>
         <span className="sr-only">Close</span>
@@ -98,4 +102,5 @@ export {
   DialogFooter,
   DialogTitle,
   DialogDescription,
+  VisuallyHidden,
 };

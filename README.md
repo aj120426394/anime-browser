@@ -263,30 +263,165 @@ npm run build && npm run start
 # Open DevTools > Lighthouse > Generate report
 ```
 
-## Deployment
+## 🚀 Deployment
 
-### Deploy to Vercel
+### Vercel Deployment (Recommended)
 
-1. **Connect repository**
-   - Push code to GitHub
-   - Link repository in Vercel dashboard
+This project is optimized for deployment on [Vercel](https://vercel.com), the creators of Next.js.
 
-2. **Deploy**
+#### Prerequisites
+- Vercel account (free tier available at https://vercel.com/signup)
+- GitHub account (for connecting repository)
+- Git setup locally
+
+#### Quick Start (Automatic Deployment)
+
+1. **Push code to GitHub repository**
+   ```bash
+   git push origin main
+   ```
+
+2. **Connect to Vercel**
+   - Visit https://vercel.com/new
+   - Select "Import Git Repository"
+   - Search for your GitHub repository: `leonardo-web-challenge`
+   - Click "Import"
+
+3. **Configure Environment Variables** (T133)
+   - In the Vercel dashboard, go to **Settings > Environment Variables**
+   - Add the following variable:
+     ```
+     Name:  NEXT_PUBLIC_CHALLENGE_VERSION
+     Value: 3.5
+     ```
+   - This variable is already in `.env.local` but must be set in Vercel for production
+
+4. **Deploy** (T134)
+   - Vercel will automatically:
+     - Build the project using `npm run build`
+     - Run type checking and linting
+     - Generate static pages
+     - Deploy to Vercel CDN globally
+   - Your project will be live at `https://your-project.vercel.app`
+
+#### Manual Deployment Steps
+
+If you prefer manual control:
+
+1. **Install Vercel CLI**
+   ```bash
+   npm install -g vercel
+   ```
+
+2. **Login to Vercel**
+   ```bash
+   vercel login
+   ```
+
+3. **Deploy**
+   ```bash
+   vercel --prod
+   ```
+   This will:
+   - Ask for project setup (use defaults recommended)
+   - Build and upload your project
+   - Provide your production URL
+
+#### Environment Variables in Vercel (T133)
+
+The project uses one environment variable:
+
+- **NEXT_PUBLIC_CHALLENGE_VERSION**: Set to `3.5` (shown in footer)
+  - Public variables (prefixed with `NEXT_PUBLIC_`) are available in the browser
+  - Must be set in both local `.env.local` and Vercel dashboard
+  - For local development, already set in `.env.local`
+
+**To set in Vercel:**
+1. Go to Project Settings → Environment Variables
+2. Click "Add New"
+3. Enter: `NEXT_PUBLIC_CHALLENGE_VERSION` = `3.5`
+4. Select "Production" environment
+5. Save
+
+#### Verification After Deployment (T134)
+
+After deployment, verify:
+
+1. **Site loads**: Visit your Vercel URL
+2. **Profile form works**: Submit a test profile (e.g., username: "TestUser", job: "QA")
+3. **Anime loads**: Navigate to /information after submission
+4. **Pagination works**: Click page buttons, verify URL changes
+5. **Modal works**: Click an anime item, verify modal opens
+6. **Footer displays**: Scroll to bottom, verify "Challenge version v3.5"
+7. **Mobile responsive**: Test on mobile viewport (< 768px)
+
+#### Deployment Verification with E2E Tests (T135)
+
+After production deployment, run E2E tests against it:
 
 ```bash
-npm run build
-npm run start  # Test locally first
+# Set your Vercel URL
+export PLAYWRIGHT_BASE_URL=https://your-project.vercel.app
 
-# Push to deploy
-git push origin main
+# Run E2E tests
+npm run test:e2e
 ```
 
-4. **Verify production**
+Expected results:
+- ✅ Profile gate test passes
+- ✅ Pagination test passes
+- ✅ Modal interaction test passes
+- ✅ Mobile viewport tests pass
 
-```bash
-# Run E2E tests against production
-npm run e2e:prod
-```
+#### Troubleshooting
+
+**Build fails with "useSearchParams" error:**
+- ✓ Already fixed in codebase with Suspense boundary
+- Re-run local build: `npm run build`
+
+**Environment variable not showing in frontend:**
+- Check that variable name starts with `NEXT_PUBLIC_`
+- Verify it's set in Vercel dashboard (not just locally)
+- Redeploy after adding: `vercel --prod`
+
+**Images not loading in production:**
+- AniList CDN is configured in `next.config.js`
+- If issue persists, check network tab for blocked requests
+- Verify `images.remotePatterns` includes anilist.co
+
+**Performance issues after deployment:**
+- Check Lighthouse: https://web.dev/measure/
+- Verify Image optimization is working (should see WebP in Network tab)
+- Check Apollo Client cache: Open DevTools → Application → Cache
+
+#### Environment-Specific Configuration
+
+**Production (Vercel)**
+- `NEXT_PUBLIC_CHALLENGE_VERSION=3.5` (via Vercel dashboard)
+- All images optimized with Next.js Image
+- Static pages pre-rendered
+- GraphQL queries cached per Lighthouse recommendations
+
+**Development (Local)**
+- `NEXT_PUBLIC_CHALLENGE_VERSION=3.5` (from `.env.local`)
+- Hot module reloading enabled
+- GraphQL in-memory cache
+- Apollo DevTools available
+
+#### Additional Vercel Features
+
+Once deployed, you can use:
+
+1. **Analytics**: Vercel → Analytics dashboard
+2. **Speed Insights**: Built-in Web Vitals monitoring
+3. **Deployment History**: Automatic rollback to previous versions
+4. **Preview URLs**: Automatic URLs for PRs
+5. **Custom Domain**: Add custom domain in Vercel Settings
+
+#### References
+- [Vercel Documentation](https://vercel.com/docs)
+- [Next.js Deployment on Vercel](https://nextjs.org/learn/basics/deploying-nextjs-app/deploy)
+- [Environment Variables in Vercel](https://vercel.com/docs/concepts/projects/environment-variables)
 
 ## Error Handling
 

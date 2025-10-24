@@ -31,7 +31,7 @@ export default function ProfileGatePage() {
     try {
       // Save profile to localStorage
       const saved = saveProfile(profileData);
-      
+
       if (saved) {
         // Redirect to information page
         router.push("/information");
@@ -56,7 +56,7 @@ export default function ProfileGatePage() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen px-4 py-12">
+    <div className="flex flex-col items-center justify-center flex-1 px-4 py-8 sm:py-12">
       <ProfileForm onSubmit={handleProfileSubmit} isLoading={isSubmitting} />
     </div>
   );

@@ -110,13 +110,13 @@
 
 ### Tests for User Story 2 (MANDATORY per constitution) ⚠️
 
-- [ ] T046 [P] [US2] Unit test for useMediaPage hook with mocked Apollo in tests/unit/hooks.test.ts
-- [ ] T047 [P] [US2] Unit test for MediaItem transformation logic in tests/unit/hooks.test.ts
-- [ ] T048 [P] [US2] Component test for MediaGrid rendering in tests/components/MediaGrid.test.tsx
-- [ ] T049 [P] [US2] Component test for MediaCard image display in tests/components/MediaCard.test.tsx
-- [ ] T050 [P] [US2] Component test for Pagination controls in tests/components/Pagination.test.tsx
-- [ ] T051 [P] [US2] E2E test for data loading from AniList API in e2e/pagination.spec.ts
-- [ ] T052 [P] [US2] E2E test for pagination navigation in e2e/pagination.spec.ts
+- [x] T046 [P] [US2] Unit test for useMediaPage hook with mocked Apollo in tests/unit/hooks.test.ts
+- [x] T047 [P] [US2] Unit test for MediaItem transformation logic in tests/unit/hooks.test.ts
+- [x] T048 [P] [US2] Component test for MediaGrid rendering in tests/components/MediaGrid.test.tsx
+- [x] T049 [P] [US2] Component test for MediaCard image display in tests/components/MediaCard.test.tsx
+- [x] T050 [P] [US2] Component test for Pagination controls in tests/components/Pagination.test.tsx
+- [x] T051 [P] [US2] E2E test for data loading from AniList API in e2e/pagination.spec.ts
+- [x] T052 [P] [US2] E2E test for pagination navigation in e2e/pagination.spec.ts
 
 ### Implementation for User Story 2
 

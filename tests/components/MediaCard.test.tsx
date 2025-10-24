@@ -95,7 +95,7 @@ describe("MediaCard Component", () => {
 
       const button = screen.getByRole("button");
       await user.tab();
-      expect(button).toBeFocused();
+      expect(button).toHaveFocus();
 
       await user.keyboard("{Enter}");
       expect(handleClick).toHaveBeenCalledOnce();

@@ -70,7 +70,17 @@ export function useMediaPage(page: number, perPage: number = 20): UseMediaPageRe
       page: validPage,
       perPage: validPerPage,
     },
+    errorPolicy: "all", // Continue even if there are errors
   });
+
+  // Debug logging
+  if (error) {
+    console.error("Apollo Query Error:", {
+      message: error.message,
+      networkError: error.networkError,
+      graphQLErrors: error.graphQLErrors,
+    });
+  }
 
   // Handle no data
   if (!data || !data.Page) {

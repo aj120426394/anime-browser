@@ -41,7 +41,10 @@ export function createApolloClient() {
   // HTTP link to AniList GraphQL endpoint
   const httpLink = new HttpLink({
     uri: "https://graphql.anilist.co",
-    credentials: "include",
+    credentials: "same-origin",
+    fetchOptions: {
+      mode: "cors",
+    },
   });
 
   // Combine links

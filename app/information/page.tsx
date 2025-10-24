@@ -61,6 +61,9 @@ export default function InformationPage() {
           <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4 text-destructive">
             <p className="font-semibold">Error loading anime</p>
             <p className="text-sm mt-1">{error.message}</p>
+            <p className="text-xs mt-2 text-destructive/80">
+              Check your internet connection and try refreshing the page.
+            </p>
           </div>
         )}
 

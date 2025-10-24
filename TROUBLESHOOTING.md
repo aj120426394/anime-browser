@@ -8,24 +8,27 @@
 
 The error was caused by **3 interconnected issues**:
 
-#### 1. **Incorrect Credentials Setting** 
+#### 1. **Incorrect Credentials Setting**
+
 **Problem**: `credentials: "include"` in HttpLink
+
 ```typescript
 // ❌ WRONG - causes CORS issues
 const httpLink = new HttpLink({
   uri: "https://graphql.anilist.co",
-  credentials: "include",  // AniList doesn't require cookies
+  credentials: "include", // AniList doesn't require cookies
 });
 ```
 
 **Solution**: Changed to `same-origin`
+
 ```typescript
 // ✅ CORRECT
 const httpLink = new HttpLink({
   uri: "https://graphql.anilist.co",
-  credentials: "same-origin",  // Proper CORS handling
+  credentials: "same-origin", // Proper CORS handling
   fetchOptions: {
-    mode: "cors",  // Explicit CORS mode
+    mode: "cors", // Explicit CORS mode
   },
 });
 ```
@@ -35,7 +38,9 @@ const httpLink = new HttpLink({
 ---
 
 #### 2. **Missing Error Policy**
+
 **Problem**: Apollo Query was strict about errors
+
 ```typescript
 // ❌ Missing errorPolicy - fails on any error
 const { data, loading, error } = useGetAnimePageQuery({
@@ -44,11 +49,12 @@ const { data, loading, error } = useGetAnimePageQuery({
 ```
 
 **Solution**: Added `errorPolicy: "all"`
+
 ```typescript
 // ✅ Better error handling
 const { data, loading, error } = useGetAnimePageQuery({
   variables: { page, perPage },
-  errorPolicy: "all",  // Continue even on partial errors
+  errorPolicy: "all", // Continue even on partial errors
 });
 ```
 
@@ -57,12 +63,15 @@ const { data, loading, error } = useGetAnimePageQuery({
 ---
 
 #### 3. **Insufficient Error Logging**
+
 **Problem**: Error messages were generic
+
 ```javascript
-console.error(`[Network error]: ${networkError}`);  // Not detailed enough
+console.error(`[Network error]: ${networkError}`); // Not detailed enough
 ```
 
 **Solution**: Added structured error logging
+
 ```typescript
 if (error) {
   console.error("Apollo Query Error:", {
@@ -80,6 +89,7 @@ if (error) {
 ### How to Test the Fix
 
 #### **Local Development**
+
 ```bash
 # Start the dev server
 npm run dev
@@ -93,6 +103,7 @@ npm run dev
 ```
 
 #### **Check Network in Browser**
+
 1. Open DevTools (F12)
 2. Go to Network tab
 3. Visit /information page
@@ -103,6 +114,7 @@ npm run dev
    - Response body (check for data or GraphQL errors)
 
 #### **Check Console Logs**
+
 ```javascript
 // Should see detailed error info if there's an issue:
 Apollo Query Error: {
@@ -119,30 +131,37 @@ Apollo Query Error: {
 #### **Still Getting Network Errors?**
 
 **1. Check Internet Connection**
+
 ```bash
 curl https://graphql.anilist.co -I
 # Should return HTTP/2 200 or similar success code
 ```
 
 **2. Check AniList API Status**
+
 - Visit https://anilist.co (should load)
 - If down, AniList API is temporarily unavailable
 
 **3. CORS Issues (if still happening)**
+
 - Browser console should show CORS error details
 - Verify fetchOptions are set correctly
 - Try using `fetch` directly to test:
+
 ```javascript
 fetch("https://graphql.anilist.co", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
-    query: `query { Page(page: 1, perPage: 1) { pageInfo { currentPage } } }`
-  })
-}).then(r => r.json()).then(console.log)
+    query: `query { Page(page: 1, perPage: 1) { pageInfo { currentPage } } }`,
+  }),
+})
+  .then((r) => r.json())
+  .then(console.log);
 ```
 
 #### **4. Rate Limiting**
+
 - AniList may rate-limit rapid requests
 - Apollo retry logic handles this (429 errors)
 - Check error message for rate limit info
@@ -207,4 +226,3 @@ fetch("https://graphql.anilist.co", {
    - Actual API error message
 
 Then provide that information for further debugging!
-

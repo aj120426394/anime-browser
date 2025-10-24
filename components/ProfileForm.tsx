@@ -126,9 +126,7 @@ export function ProfileForm({ onSubmit, isLoading = false }: ProfileFormProps) {
               {errors.username}
             </p>
           )}
-          <p className="text-xs text-muted-foreground">
-            {username.length}/50 characters
-          </p>
+          <p className="text-xs text-muted-foreground">{username.length}/50 characters</p>
         </div>
 
         {/* Job Title Field */}
@@ -152,18 +150,11 @@ export function ProfileForm({ onSubmit, isLoading = false }: ProfileFormProps) {
               {errors.jobTitle}
             </p>
           )}
-          <p className="text-xs text-muted-foreground">
-            {jobTitle.length}/100 characters
-          </p>
+          <p className="text-xs text-muted-foreground">{jobTitle.length}/100 characters</p>
         </div>
 
         {/* Submit Button */}
-        <Button
-          type="submit"
-          disabled={isLoading}
-          className="w-full"
-          size="lg"
-        >
+        <Button type="submit" disabled={isLoading} className="w-full" size="lg">
           {isLoading ? "Saving..." : "Save Profile"}
         </Button>
       </form>

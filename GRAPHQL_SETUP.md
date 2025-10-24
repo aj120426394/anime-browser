@@ -29,6 +29,7 @@ lib/graphql/
 ### How It Works
 
 1. **Write Query** → `lib/graphql/anime.graphql`
+
    ```graphql
    query GetAnimePage($page: Int!, $perPage: Int!) {
      Page(page: $page, perPage: $perPage) {
@@ -46,12 +47,13 @@ lib/graphql/
      - `useGetAnimePageLazyQuery()` lazy hook
 
 3. **Use in Components**
+
    ```typescript
    import { useGetAnimePageQuery } from "@/lib/graphql/generated/operations";
-   
+
    export function useMediaPage(page: number, perPage: number = 20) {
      const { data, loading, error } = useGetAnimePageQuery({
-       variables: { page, perPage }
+       variables: { page, perPage },
      });
      // ... transform and return
    }
@@ -60,6 +62,7 @@ lib/graphql/
 ### Generated Files
 
 **`lib/graphql/generated/operations.ts`** (manually created for now, can be regenerated):
+
 - `GetAnimePageQuery` - Full typed response
 - `GetAnimePageQueryVariables` - Typed variables
 - `GetAnimePageDocument` - gql document
@@ -71,6 +74,7 @@ lib/graphql/
 When you need more queries:
 
 1. Create `lib/graphql/queries/anime.graphql` (or `manga.graphql`, etc.)
+
    ```graphql
    query GetMangaPage($page: Int!, $perPage: Int!) {
      # ...
@@ -88,15 +92,16 @@ When you need more queries:
 ### Configuration
 
 **`codegen.yml`**:
+
 ```yaml
-schema: https://graphql.anilist.co      # AniList GraphQL endpoint
-documents: "lib/graphql/**/*.graphql"   # Read queries from .graphql files
+schema: https://graphql.anilist.co # AniList GraphQL endpoint
+documents: "lib/graphql/**/*.graphql" # Read queries from .graphql files
 
 generates:
-  lib/graphql/generated/schema.ts:      # Full schema types
+  lib/graphql/generated/schema.ts: # Full schema types
     plugins: [typescript]
-  
-  lib/graphql/generated/operations.ts:  # Query-specific types & hooks
+
+  lib/graphql/generated/operations.ts: # Query-specific types & hooks
     plugins:
       - typescript
       - typescript-operations
@@ -106,6 +111,7 @@ generates:
 ### When to Regenerate
 
 Run `npm run codegen` when:
+
 - ✅ Adding a new `.graphql` file with queries
 - ✅ Updating existing queries in `.graphql` files
 - ✅ AniList schema changes (rare)
@@ -138,13 +144,14 @@ git commit -m "..."
 ✅ **Scalability**: Easy to add 10+ queries without clutter  
 ✅ **Maintenance**: Single source of truth for query definitions  
 ✅ **Best Practice**: Matches industry standard GraphQL workflows  
-✅ **Developer Experience**: Clean separation of concerns  
+✅ **Developer Experience**: Clean separation of concerns
 
 ---
 
 ## Next Steps
 
 When Phase 3 begins (Profile Gate implementation):
+
 1. You might add more `.graphql` files as needed
 2. Run `npm run codegen` to update generated types
 3. Use the generated hooks in your components

@@ -155,9 +155,7 @@ export type PaginationState = z.infer<typeof PaginationStateSchema>;
  * Challenge version (static configuration)
  */
 export const ChallengeVersionSchema = z.object({
-  version: z
-    .string()
-    .regex(/^v?\d+\.\d+$/, 'Version must be in format "X.Y" or "vX.Y"'),
+  version: z.string().regex(/^v?\d+\.\d+$/, 'Version must be in format "X.Y" or "vX.Y"'),
 });
 
 export type ChallengeVersion = z.infer<typeof ChallengeVersionSchema>;

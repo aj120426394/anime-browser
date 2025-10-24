@@ -50,9 +50,7 @@ export function MediaCard({ item, onClick }: MediaCardProps) {
               {item.engTitle || item.nativeTitle}
             </p>
             {item.engTitle && item.nativeTitle !== item.engTitle && (
-              <p className="text-xs text-muted-foreground line-clamp-1">
-                {item.nativeTitle}
-              </p>
+              <p className="text-xs text-muted-foreground line-clamp-1">{item.nativeTitle}</p>
             )}
           </div>
 

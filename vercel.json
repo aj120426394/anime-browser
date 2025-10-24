@@ -3,13 +3,6 @@
   "devCommand": "npm run dev",
   "installCommand": "npm ci",
   "framework": "nextjs",
-  "env": {
-    "NEXT_PUBLIC_CHALLENGE_VERSION": {
-      "description": "Challenge version for footer display",
-      "required": false,
-      "default": "3.5"
-    }
-  },
   "regions": ["iad1"],
   "functions": {
     "api/**/*.ts": {

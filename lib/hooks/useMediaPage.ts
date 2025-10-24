@@ -1,79 +1,74 @@
 "use client";
 
 import { useGetAnimePageQuery } from "@/lib/graphql/generated/operations";
-import { MediaItem, MediaItemSchema, PageInfo, PageInfoSchema } from "@/lib/schema";
+import { MediaItem, MediaItemSchema } from "@/lib/schema";
 
-interface UseMediaPageReturn {
+export interface UseMediaPageReturn {
   mediaItems: MediaItem[];
-  pageInfo: PageInfo | null;
+  pageInfo: { hasNextPage: boolean; currentPage: number };
   loading: boolean;
   error: Error | null;
 }
 
-interface AniListMedia {
-  id: number;
-  title: {
-    english: string | null;
-    native: string;
-  };
-  status: string;
-  type: string;
-  startDate: {
-    year: number | null;
-    month: number | null;
-    day: number | null;
-  };
-  endDate: {
-    year: number | null;
-    month: number | null;
-    day: number | null;
-  };
-  description: string | null;
-  coverImage: {
-    large: string | null;
-    medium: string | null;
-  };
-}
-
 /**
- * Transform AniList API response to internal MediaItem DTO
+ * Transform AniList media object to internal MediaItem format
+ * Extracts and normalizes fields from GraphQL response
+ * @throws Throws if required fields missing (catches in hook)
  */
-function transformToMediaItem(anilistMedia: AniListMedia): MediaItem {
-  return {
-    id: anilistMedia.id.toString(),
-    engTitle: anilistMedia.title.english || "",
-    nativeTitle: anilistMedia.title.native,
-    status: anilistMedia.status as any,
-    type: anilistMedia.type as any,
-    startDate: anilistMedia.startDate,
-    endDate: anilistMedia.endDate,
-    description: anilistMedia.description || "",
-    imageMedium: anilistMedia.coverImage.medium || "",
-    imageLarge: anilistMedia.coverImage.large || "",
+function transformToMediaItem(anilistMedia: any): MediaItem {
+  // Transform AniList API response to our internal MediaItem schema
+  // Handles field mapping and type conversion
+  const item = {
+    id: anilistMedia.id?.toString() ?? "",
+    engTitle: anilistMedia.title?.english ?? anilistMedia.title?.romaji ?? "Unknown",
+    nativeTitle: anilistMedia.title?.native ?? "",
+    status: anilistMedia.status ?? "UNKNOWN",
+    type: anilistMedia.type ?? "ANIME",
+    startDate: {
+      year: anilistMedia.startDate?.year ?? null,
+      month: anilistMedia.startDate?.month ?? null,
+      day: anilistMedia.startDate?.day ?? null,
+    },
+    endDate: {
+      year: anilistMedia.endDate?.year ?? null,
+      month: anilistMedia.endDate?.month ?? null,
+      day: anilistMedia.endDate?.day ?? null,
+    },
+    description: anilistMedia.description ?? "",
+    imageMedium: anilistMedia.coverImage?.medium ?? "",
+    imageLarge: anilistMedia.coverImage?.large ?? "",
   };
+
+  // Validate transformed item with Zod schema
+  // Ensures only properly typed data is returned
+  return MediaItemSchema.parse(item);
 }
 
 /**
- * Fetch and transform paginated anime data from AniList
- * @param page - Current page number (1-indexed)
- * @param perPage - Number of items per page (default 20, max 50)
- * @returns Object containing mediaItems array, pageInfo, loading and error states
+ * Fetch paginated anime data from AniList GraphQL API
+ * Transforms API response to internal MediaItem format
+ * Handles errors gracefully with detailed logging
+ *
+ * @param page - Page number (1-indexed)
+ * @param perPage - Items per page (default 20)
+ * @returns Object with mediaItems, pageInfo, loading, and error states
  */
 export function useMediaPage(page: number, perPage: number = 20): UseMediaPageReturn {
-  // Validate page parameter
+  // Validate page parameter - ensure positive integer
   const validPage = Math.max(1, Math.floor(page));
-  const validPerPage = Math.max(1, Math.min(perPage, 50)); // AniList max is 50
+  const validPerPage = Math.max(1, Math.min(perPage, 25)); // AniList max is 25
 
-  // Use the generated hook to fetch data
+  // Execute GraphQL query with Apollo Client
+  // errorPolicy: "all" continues loading even if graphQL errors occur
   const { data, loading, error } = useGetAnimePageQuery({
     variables: {
       page: validPage,
       perPage: validPerPage,
     },
-    errorPolicy: "all", // Continue even if there are errors
+    errorPolicy: "all", // Don't throw on GraphQL errors, show partial data
   });
 
-  // Debug logging
+  // Log errors for debugging (helpful in production)
   if (error) {
     console.error("Apollo Query Error:", {
       message: error.message,
@@ -82,41 +77,35 @@ export function useMediaPage(page: number, perPage: number = 20): UseMediaPageRe
     });
   }
 
-  // Handle no data
-  if (!data || !data.Page) {
+  if (!data?.Page) {
     return {
       mediaItems: [],
-      pageInfo: null,
+      pageInfo: { hasNextPage: false, currentPage: validPage },
       loading,
-      error: error || null,
+      error: error ?? null,
     };
   }
 
-  try {
-    // Transform and validate pageInfo
-    const pageInfoData = data.Page.pageInfo;
-    const pageInfo = pageInfoData
-      ? PageInfoSchema.parse({
-          currentPage: pageInfoData.currentPage,
-          hasNextPage: pageInfoData.hasNextPage,
-          perPage: pageInfoData.perPage,
-        })
-      : null;
+  // Transform AniList response items to internal MediaItem format
+  const mediaItems = (data.Page.media ?? [])
+    .map((item: any) => {
+      try {
+        return transformToMediaItem(item);
+      } catch (err) {
+        // Log transformation errors but continue processing other items
+        console.error("Failed to transform media item:", item.id, err);
+        return null;
+      }
+    })
+    .filter((item): item is MediaItem => item !== null); // Type guard to remove nulls
 
-    // Transform and validate media items
-    const mediaItems = (data.Page.media || [])
-      .filter((item): item is AniListMedia => Boolean(item))
-      .map(transformToMediaItem)
-      .map((item) => MediaItemSchema.parse(item));
-
-    return { mediaItems, pageInfo, loading, error: error || null };
-  } catch (validationError) {
-    console.error("Validation error:", validationError);
-    return {
-      mediaItems: [],
-      pageInfo: null,
-      loading: false,
-      error: validationError instanceof Error ? validationError : new Error("Validation failed"),
-    };
-  }
+  return {
+    mediaItems,
+    pageInfo: {
+      hasNextPage: data.Page.pageInfo?.hasNextPage ?? false,
+      currentPage: validPage,
+    },
+    loading,
+    error: error ?? null,
+  };
 }

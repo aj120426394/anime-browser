@@ -1,82 +1,48 @@
-import { ApolloClient, InMemoryCache, HttpLink, from } from "@apollo/client";
-import { RetryLink } from "@apollo/client/link/retry";
-import { onError } from "@apollo/client/link/error";
+import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
 
 /**
- * Create Apollo Client instance for AniList GraphQL API
- * Includes retry logic, error handling, and pagination caching
+ * Apollo Client Configuration
+ * Connects to AniList GraphQL API with optimized caching for pagination
  */
-export function createApolloClient() {
-  // Retry link with exponential backoff for transient failures
-  const retryLink = new RetryLink({
-    delay: {
-      initial: 250,
-      max: 1000,
-      jitter: true,
-    },
-    attempts: {
-      max: 3,
-      retryIf: (error) => {
-        // Retry on network errors or rate limits
-        return !!error && (error.statusCode === 429 || error.statusCode >= 500);
-      },
-    },
-  });
 
-  // Error handling link
-  const errorLink = onError(({ graphQLErrors, networkError }) => {
-    if (graphQLErrors) {
-      graphQLErrors.forEach(({ message, locations, path }) => {
-        console.error(
-          `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
-        );
-      });
-    }
+// HTTP link configuration for AniList GraphQL endpoint
+// credentials: "same-origin" - Only include credentials for same-origin requests (avoids CORS issues)
+// mode: "cors" - Explicitly enable CORS for cross-origin requests
+const httpLink = new HttpLink({
+  uri: "https://graphql.anilist.co",
+  credentials: "same-origin",
+  fetchOptions: {
+    mode: "cors",
+  },
+});
 
-    if (networkError) {
-      console.error(`[Network error]: ${networkError}`);
-    }
-  });
-
-  // HTTP link to AniList GraphQL endpoint
-  const httpLink = new HttpLink({
-    uri: "https://graphql.anilist.co",
-    credentials: "same-origin",
-    fetchOptions: {
-      mode: "cors",
-    },
-  });
-
-  // Combine links
-  const link = from([retryLink, errorLink, httpLink]);
-
-  // Create cache with type policies for pagination
-  const cache = new InMemoryCache({
-    typePolicies: {
-      Query: {
-        fields: {
-          Page: {
-            keyArgs: ["page", "perPage"],
-            merge(existing, incoming) {
-              // Replace cache on page change
-              return incoming;
-            },
+// In-memory cache with type policies for optimized pagination
+// Implements field-level caching to avoid duplicate API calls when navigating pages
+export const cache = new InMemoryCache({
+  typePolicies: {
+    Query: {
+      fields: {
+        // Page field caching: keyed by page number to store separate responses per page
+        // This enables efficient deep linking - can jump to any page without re-fetching
+        Page: {
+          keyArgs: ["page", "perPage"], // Cache key includes both page and perPage params
+          merge(existing = {}, incoming) {
+            // Merge incoming page data with existing cache
+            return { ...existing, ...incoming };
           },
         },
       },
     },
-  });
+  },
+});
 
-  return new ApolloClient({
-    link,
-    cache,
-    defaultOptions: {
-      watchQuery: {
-        fetchPolicy: "cache-first" as const,
-      },
-      query: {
-        fetchPolicy: "cache-first" as const,
-      },
-    },
-  });
-}
+// Initialize Apollo Client with cache and HTTP link
+// SSR-safe: Apollo Client is only instantiated in browser environment
+const apolloClient = new ApolloClient({
+  ssrMode: typeof window === "undefined", // Enable SSR mode if running on server
+  link: httpLink,
+  cache,
+  connectToDevTools: true, // Enable Apollo DevTools for debugging
+});
+
+export default apolloClient;

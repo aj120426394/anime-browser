@@ -282,7 +282,7 @@
   - ✓ Error handling documentation
   - ✓ Troubleshooting section
 
-- [ ] T114 [P] Add inline comments for non-obvious logic (Apollo cache config, SSR checks, sanitization)
+- [x] T114 [P] Add inline comments for non-obvious logic (Apollo cache config, SSR checks, sanitization)
 
 ### Code Standards (Automated Checks)
 
@@ -325,7 +325,13 @@
 
 ### Deployment Configuration
 
-- [ ] T132 [P] Create Vercel deployment configuration (vercel.json if needed)
+- [x] T132 [P] Create Vercel deployment configuration (vercel.json if needed)
+  - ✓ Created vercel.json with Next.js configuration
+  - ✓ Environment variables defined
+  - ✓ Build and dev commands configured
+  - ✓ Node version set to 20.x
+  - ✓ Cache headers and clean URLs configured
+
 - [ ] T133 [P] Set up environment variables in Vercel dashboard
 - [ ] T134 Deploy to Vercel and verify production build works
 - [ ] T135 Run full E2E test suite against Vercel deployment

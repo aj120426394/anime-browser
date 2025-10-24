@@ -1,14 +1,7 @@
 schema: https://graphql.anilist.co
-documents: "lib/graphql/**/*.graphql"
+documents: "lib/graphql/queries/**/*.graphql"
 
 generates:
-  lib/graphql/generated/schema.ts:
-    plugins:
-      - typescript
-    config:
-      useIndexSignature: true
-      enumsAsTypes: true
-
   lib/graphql/generated/operations.ts:
     plugins:
       - typescript
@@ -17,5 +10,4 @@ generates:
     config:
       withHooks: true
       withComponent: false
-      importOperationTypesFrom: "./schema"
       enumsAsTypes: true

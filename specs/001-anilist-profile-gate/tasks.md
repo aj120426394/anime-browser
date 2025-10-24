@@ -81,22 +81,22 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T033 [P] [US1] Unit test for ProfileSchema validation in tests/unit/schema.test.ts
-- [ ] T034 [P] [US1] Unit test for getProfile and saveProfile in tests/unit/storage.test.ts
-- [ ] T035 [P] [US1] Unit test for useProfile hook in tests/unit/hooks.test.ts
+- [x] T033 [P] [US1] Unit test for ProfileSchema validation in tests/unit/schema.test.ts
+- [x] T034 [P] [US1] Unit test for getProfile and saveProfile in tests/unit/storage.test.ts
+- [x] T035 [P] [US1] Unit test for useProfile hook in tests/unit/hooks.test.ts
 - [ ] T036 [P] [US1] Component test for ProfileForm validation in tests/components/ProfileForm.test.tsx
 - [ ] T037 [P] [US1] Component test for ProfileForm submission in tests/components/ProfileForm.test.tsx
-- [ ] T038 [P] [US1] E2E test for profile gate blocking in e2e/profile-gate.spec.ts
-- [ ] T039 [P] [US1] E2E test for profile form submission flow in e2e/profile-gate.spec.ts
+- [x] T038 [P] [US1] E2E test for profile gate blocking in e2e/profile-gate.spec.ts
+- [x] T039 [P] [US1] E2E test for profile form submission flow in e2e/profile-gate.spec.ts
 
 ### Implementation for User Story 1
 
-- [ ] T040 [P] [US1] Create ProfileForm component in components/ProfileForm.tsx with validation
-- [ ] T041 [US1] Create profile gate page in app/page.tsx with useProfile hook
-- [ ] T042 [US1] Implement redirect logic: if profile exists, redirect to /information
-- [ ] T043 [US1] Add form validation error display in ProfileForm component
-- [ ] T044 [US1] Add loading states to ProfileForm during submission
-- [ ] T045 [US1] Test ProfileForm on mobile viewport (320px width)
+- [x] T040 [P] [US1] Create ProfileForm component in components/ProfileForm.tsx with validation
+- [x] T041 [US1] Create profile gate page in app/page.tsx with useProfile hook
+- [x] T042 [US1] Implement redirect logic: if profile exists, redirect to /information
+- [x] T043 [US1] Add form validation error display in ProfileForm component
+- [x] T044 [US1] Add loading states to ProfileForm during submission
+- [x] T045 [US1] Test ProfileForm on mobile viewport (320px width)
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently
 
@@ -120,16 +120,16 @@
 
 ### Implementation for User Story 2
 
-- [ ] T053 [P] [US2] Create MediaCard component in components/MediaCard.tsx with Next.js Image
-- [ ] T054 [P] [US2] Create MediaGrid component in components/MediaGrid.tsx with responsive grid
-- [ ] T055 [P] [US2] Create Pagination component in components/Pagination.tsx with ellipsis logic
-- [ ] T056 [US2] Create information page in app/information/page.tsx with useMediaPage hook
-- [ ] T057 [US2] Implement profile check: redirect to / if no profile exists
-- [ ] T058 [US2] Add loading skeleton for MediaGrid during data fetch
-- [ ] T059 [US2] Add error handling for API failures with user-friendly messages
-- [ ] T060 [US2] Add empty state when no results returned from API
+- [x] T053 [P] [US2] Create MediaCard component in components/MediaCard.tsx with Next.js Image
+- [x] T054 [P] [US2] Create MediaGrid component in components/MediaGrid.tsx with responsive grid
+- [x] T055 [P] [US2] Create Pagination component in components/Pagination.tsx with ellipsis logic
+- [x] T056 [US2] Create information page in app/information/page.tsx with useMediaPage hook
+- [x] T057 [US2] Implement profile check: redirect to / if no profile exists
+- [x] T058 [US2] Add loading skeleton for MediaGrid during data fetch
+- [x] T059 [US2] Add error handling for API failures with user-friendly messages
+- [x] T060 [US2] Add empty state when no results returned from API
 - [ ] T061 [US2] Configure Apollo Client retry logic with exponential backoff (250ms → 500ms → 1s)
-- [ ] T062 [US2] Test responsive grid layout on mobile (1-col) and desktop (2-4 cols)
+- [x] T062 [US2] Test responsive grid layout on mobile (1-col) and desktop (2-4 cols)
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently
 

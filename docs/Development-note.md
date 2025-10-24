@@ -300,9 +300,46 @@ e2e/                  # Playwright specs
 
 ## Notable Trade-offs
 
-- **Zod runtime validation** is applied at two boundaries---profile and GraphQL→UI---adding small overhead for strong resilience against unexpected/null shapes and future API drift.
-- **AA vs AAA:** AA everywhere; AAA opportunistically when it was essentially free.
-- **Generated vs hand-authored types:** GraphQL codegen types for network contracts; Zod + DTOs keep rendering ergonomic and safe.
-- **Caching:** Apollo in-memory cache with simple field policies; could evolve to ISR/route caching if scope grows.
+- **Runtime validation (Zod)**
+  - **Trade-off:** Add Zod at boundaries vs. rely on compile-time types only
+  - **Why:** Protects against unexpected/null shapes and forward schema drift at runtime
+  - **Cost:** Small perf overhead on parse; minimal code footprint
 
----
+- **A11y target (AA vs AAA)**
+  - **Trade-off:** WCAG 2.2 **AA** baseline with selective **AAA** vs. chasing full AAA everywhere
+  - **Why:** Meets inclusivity goals without slowing delivery
+  - **Cost:** A few edge criteria deferred (not user-visible in most flows)
+
+- **Type strategy (codegen + DTOs)**
+  - **Trade-off:** Generated operation types + hand-rolled UI DTOs vs. using raw GraphQL shapes in components
+  - **Why:** Stable, ergonomic props; single place for sanitation/fallbacks
+  - **Cost:** Thin mapping layer to maintain
+
+- **Caching approach**
+  - **Trade-off:** Apollo in-memory cache + field policies vs. heavier route-level caching/ISR
+  - **Why:** Simple, predictable, and enough for this scope
+  - **Cost:** No cross-session persistence; can evolve later if needed
+
+### Storage & Networking
+
+- **LocalStorage vs. Cookies (Profile gate)**
+  - **Trade-off:** `localStorage` (user-controlled, never sent to server) vs. cookies
+  - **Why:** Profile data is **client-only**; no reason to transmit on every request
+  - **Cost:** `localStorage` can be unavailable/restricted in some private browsing contexts
+
+- **Pagination: No Prefetching**
+  - **Trade-off:** Fetch on-demand only vs. eagerly prefetch next page
+  - **Why:** Simplicity and respect AniList rate limits (~90 req/min); avoids wasted bandwidth
+  - **Cost:** Slight delay when clicking "Next" (Apollo cache softens repeat visits)
+
+### Content & Safety
+
+- **GraphQL descriptions: plain text by default**
+  - **Trade-off:** `description(asHtml: false)` + sanitize when needed vs. always accepting HTML
+  - **Why:** Most AniList descriptions are plain text; reduces exposure to unsafe markup
+  - **Cost:** Minor overhead when legitimate HTML appears (sanitization + formatting loss possible)
+
+- **Sanitization approach**
+  - **Trade-off:** `isomorphic-dompurify` + Zod validation vs. forcing plain text only
+  - **Why:** Preserves useful formatting (bold/italics) while preventing XSS on both server & client
+  - **Cost:** Small library overhead (~5KB gzipped) and a sanitize step per render path

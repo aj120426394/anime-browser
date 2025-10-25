@@ -32,7 +32,7 @@ A blocking **Dialog** collects **Username** and **Job Title** on first run. Unti
 
 ## Methodology
 
-I used **Spec-Driven Development (SDD)** with **SpecKit**, and run it with **Cursor IDE**. The spec captured user journeys, page flows, data models, non-functional goals (a11y AA; TTI < 1s), and guardrails (no data before profile gate, minimal dependencies). SpecKit turned this into phased tasks and structured prompts so AI output stayed inside the plan. I acted as reviewer/maintainer, correcting inaccuracies and enforcing the spec.
+I used **Spec-Driven Development (SDD)** with **SpecKit**, and run it on **Cursor IDE**. The spec captured user journeys, page flows, data models, non-functional goals (a11y AA; TTI < 1s), and guardrails (no data before profile gate, minimal dependencies). SpecKit turned this into phased tasks and structured prompts so AI output stayed inside the plan. I acted as reviewer/maintainer, correcting inaccuracies and enforcing the spec.
 
 ---
 

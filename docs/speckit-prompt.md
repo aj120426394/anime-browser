@@ -57,16 +57,16 @@ Architecture
 			- Persist username and job title in local storage after sumit is clicked. Make sure it's showing the persisted value when it's reload
 			- Users can view their stored profile and edit it later.
 	- Info page:
-		- Layout: paginated table in the center
+		- Layout: paginated table in the center with grid to display item from data source
 		- Key point:
 			- Only start loading data when the username and job title are entered (can be loaded from localstorage). No request is issued until profile exists (skip: true or equivalent).
-			- Renders a grid list with at least a dozen items per page (configurable).
-			- Each list itme show medium Image, title in english and title in native
+			- Renders a grid list with at least a 20 items per page.
+			- Each list item show medium Image, title in english,  title in native, type and status
 			- Visiting /information?page=N loads page N (after unblocked).
 			- Invalid page defaults to 1.
 			- Next/Previous controls update the page param.
 			- Only show near by 4 page index (prev 2, next 2) and first page / last page in the page button. Use `...` to represent if there is more.
-			- Clicking an item opens a modal with lage image, title, status, type, startDate, endDate and description (sanitized).
+			- Clicking an item opens a modal with large image, title, status, type, startDate, endDate and description (sanitized).
 			- Modal is keyboard navigable and closable via ESC and overlay click.
 - GraphQL
 	- Use Apollo Client to query data from GraphQL API (https://graphql.anilist.co)
@@ -87,9 +87,7 @@ Architecture
 	  - MediaCoverImage: `{large:string, medium:string}`
 	  - FuzzyDate `{year: Int, month: Int, day: Int}`
   - AniListQuery:
-```
-
-    	Page (page: $page, perPage: $perPage) {
+        Page (page: $page, perPage: $perPage) {
     		  pageInfo {
     			  currentPage
     			  hasNextPage
@@ -112,14 +110,11 @@ Architecture
     			  }
     		  }
     	  }
-    	```
-
 - Data model
   - Profile: `{username: string, jobTitle: string}` persisted in localStorage under a stable key.
   - Page: `{pageInfo: PageInfo, mediaItems: [MediaItem]}`
   - PageInfo `{curentPage: number, hasNextPage: boolean, perPage: number}`
   - MediaItem `{id: string, engTitle: string, nativeTitle: string, status: string, startDate: Date, end: Date, description: string, type: string, imageMedium: string, imageLarge: string}`
-
 - Testing:
   - Unit
   - Component: Every component
@@ -137,7 +132,4 @@ Architecture
   components/ # All the components sit
   tests/ # All the unit test sit
   e2e/ # All the e2e test sit
-
-```
-
 ```

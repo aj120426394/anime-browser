@@ -55,9 +55,9 @@ I used **Spec-Driven Development (SDD)** with **SpecKit**, and run it on **Curso
 
 On initial visit, a **shadcn/ui Dialog** blocks the app until the user provides **Username** and **Job Title**. Until saved, no data is fetched and the rest of the UI is inaccessible. After submit, the profile persists (details below) and the UI unlocks.
 
-### Information Page (Browse)
+### Information Page
 
-A paginated list backed by AniList GraphQL. Items display image, title, and summary. Pagination is **URL-addressable** so users can deep-link a specific page, e.g. `/browse?page=2&perPage=20`. The grid adapts from one column on small screens to multiple cards on wider breakpoints.
+A paginated list backed by AniList GraphQL. Items display image, title, and summary. Pagination is **URL-addressable** so users can deep-link a specific page, e.g. `/information?page=2`. The grid adapts from one column on small screens to multiple cards on wider breakpoints.
 
 ### Details Modal
 
